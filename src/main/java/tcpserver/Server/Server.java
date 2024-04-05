@@ -43,9 +43,8 @@ public class Server {
      */
     public void runServer() throws IOException {
         boolean serverActive = true;
+        mqttConnect();
         while(serverActive) {
-            mqttConnect();
-
             try {
                 clientSocket = mss.accept();
 
