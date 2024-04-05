@@ -35,7 +35,7 @@ public class Server {
             e.printStackTrace();
         }
 
-        mqttClient = new BackendClient();
+        // mqttClient = new BackendClient();
     }
 
     /*
