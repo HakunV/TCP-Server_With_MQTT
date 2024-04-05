@@ -149,7 +149,7 @@ public class ProtocolHandler {
         System.out.println("GPS Real-time Retransmission:");
         checkReal(realTime);
 
-        client.publish(latVal, lonVal);
+        // client.publish(latVal, lonVal);
     }
 
     private void handleStatus(String d, String isn) {
