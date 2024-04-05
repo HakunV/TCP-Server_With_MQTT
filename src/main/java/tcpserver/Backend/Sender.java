@@ -52,6 +52,8 @@ public class Sender {
 
         int aliveLSB = Integer.parseInt("01111000", 2);
         tempMes += String.format("%02X", aliveLSB);
+
+        
         
         // Payload
 

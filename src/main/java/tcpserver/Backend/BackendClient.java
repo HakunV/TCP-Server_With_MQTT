@@ -17,6 +17,7 @@ public class BackendClient implements Runnable {
     private Sender s = null;
 
     private boolean active = true;
+    private int keepAlive = 5000;
 
     public BackendClient() {
         this.waiter = new Object();
@@ -72,5 +73,9 @@ public class BackendClient implements Runnable {
 
     public void unsubscribe() {
         s.sendUnsubscribe();
+    }
+
+    private void setKeepAlive(int x) {
+        keepAlive = x;
     }
 }
