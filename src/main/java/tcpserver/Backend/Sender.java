@@ -1,6 +1,7 @@
 package tcpserver.Backend;
 
 import java.io.*;
+import java.lang.reflect.Array;
 
 import com.google.gson.Gson;
 
@@ -13,6 +14,8 @@ public class Sender {
     private String nothingImportant = "6a2b0454-7bcb-46eb-8e77-37005d22d72c";
 
     private boolean pubDup = false;
+
+    private int upscaleFactor = 10000;
 
     public Sender(BackendClient bc, BufferedOutputStream bos) {
         this.bc = bc;
@@ -53,7 +56,7 @@ public class Sender {
         int aliveLSB = Integer.parseInt("01111000", 2);
         tempMes += String.format("%02X", aliveLSB);
 
-        
+
         
         // Payload
 
@@ -127,8 +130,12 @@ public class Sender {
 
         // Payload
 
-        String payload = getJSON(lat, lon);
-        String payloadHex = textToHex(payload);
+        // Convert the latitude and longitude to integer, so it corresponds to the conversion on server side
+        float tempLat = (float) (lat+90)*upscaleFactor;
+        float tempLon = (float) (lon+180)*upscaleFactor;
+
+        String payload = getJSON((int) tempLat, (int) tempLon);
+        String payloadHex = payloadToHex(payload);
 
         tempMes += payloadHex;
 
@@ -283,7 +290,7 @@ public class Sender {
      * [4]: Channel
      * [5]: Signal aka RSSI
      */
-    public String getJSON(float lat, float lon) {
+    public String getJSON(int lat, int lon) {
         String[] wifi_config = wc.configure();
 
         mpp.setName("W15");
@@ -329,6 +336,40 @@ public class Sender {
         return userHex;
     }
 
+    public String payloadToHex(String s) {
+        int lat = 0;
+        int lon = 0;
+
+        int posLat = s.lastIndexOf("\"lat\":")+"\"lat\":".length();
+        int posLon = s.lastIndexOf("\"lon\":")+"\"lon\":".length();
+
+        int lastLat = s.lastIndexOf(",\"lon\":");
+        int lastLon = s.lastIndexOf("},\"AuthToken");
+
+        char[] userArr = s.toCharArray();
+        String userHex = "";
+        for (int i = 0; i < userArr.length; i++) {
+            if (i == posLat) {
+                String latStr = s.substring(i, lastLat);
+                lat = Integer.parseInt(latStr);
+
+                userHex += String.format("%06x", lat);
+                i = i+latStr.length()-1;
+            }
+            else if (i == posLon) {
+                String lonStr = s.substring(i, lastLon);
+                lon = Integer.parseInt(lonStr);
+
+                userHex += String.format("%06x", lon);
+                i = i+lonStr.length()-1;
+            }
+            else {
+                userHex += String.format("%02X", (int) userArr[i]);
+            }
+        }
+        return userHex;
+    }
+
     public byte[] hexStrToByteArr(String data) {
         int len = data.length();
         byte[] bytes = new byte[len / 2];
@@ -352,5 +393,33 @@ public class Sender {
             res += String.format("%02X", digit);
         }
         return res;
+    }
+
+    public static <T> T concatenate(T a, T b) {
+        if (!a.getClass().isArray() || !b.getClass().isArray()) {
+            throw new IllegalArgumentException();
+        }
+    
+        Class<?> resCompType;
+        Class<?> aCompType = a.getClass().getComponentType();
+        Class<?> bCompType = b.getClass().getComponentType();
+    
+        if (aCompType.isAssignableFrom(bCompType)) {
+            resCompType = aCompType;
+        } else if (bCompType.isAssignableFrom(aCompType)) {
+            resCompType = bCompType;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    
+        int aLen = Array.getLength(a);
+        int bLen = Array.getLength(b);
+    
+        @SuppressWarnings("unchecked")
+        T result = (T) Array.newInstance(resCompType, aLen + bLen);
+        System.arraycopy(a, 0, result, 0, aLen);
+        System.arraycopy(b, 0, result, aLen, bLen);        
+    
+        return result;
     }
 }

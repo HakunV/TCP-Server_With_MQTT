@@ -42,6 +42,7 @@ public class BackendClient implements Runnable {
     public void run() {
         connect();
 
+        publish((float) 50.3218, (float) 13.8273);
         while (active) {
             
         }

@@ -35,9 +35,9 @@ public class WiFi_Config {
 
         try {
             // For Windows
-            // ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "netsh wlan show interface \"Wi-Fi\"");
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "netsh wlan show interface \"Wi-Fi\"");
             // For Linux
-            ProcessBuilder pb = new ProcessBuilder("bash", "-c", "netsh wlan show interface \"Wi-Fi\"");
+            // ProcessBuilder pb = new ProcessBuilder("bash", "-c", "netsh wlan show interface \"Wi-Fi\"");
             pb.redirectErrorStream(true);
         
             BufferedReader br = new BufferedReader(new InputStreamReader(pb.start().getInputStream()));

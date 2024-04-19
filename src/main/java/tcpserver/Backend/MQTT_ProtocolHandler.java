@@ -262,7 +262,7 @@ public class MQTT_ProtocolHandler {
 
         // Variable Header
 
-        int packetID = Integer.parseInt(str.substring(pointer, pointer+2*byteSize));
+        int packetID = Integer.parseInt(str.substring(pointer, pointer+2*byteSize), 16);
         System.out.println("    Packet Identifier: " + packetID);
         System.out.println();
 
