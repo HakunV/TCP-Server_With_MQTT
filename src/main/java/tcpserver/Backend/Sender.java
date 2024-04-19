@@ -135,7 +135,7 @@ public class Sender {
         float tempLon = (float) (lon+180)*upscaleFactor;
 
         String payload = getJSON((int) tempLat, (int) tempLon);
-        String payloadHex = payloadToHex(payload);
+        String payloadHex = gpsPayloadToHex(payload);
 
         tempMes += payloadHex;
 
@@ -336,7 +336,7 @@ public class Sender {
         return userHex;
     }
 
-    public String payloadToHex(String s) {
+    public String gpsPayloadToHex(String s) {
         int lat = 0;
         int lon = 0;
 
