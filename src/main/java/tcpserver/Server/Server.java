@@ -35,7 +35,7 @@ public class Server {
             e.printStackTrace();
         }
 
-        // mqttClient = new BackendClient();
+        mqttClient = new BackendClient();
     }
 
     /*
@@ -43,7 +43,7 @@ public class Server {
      */
     public void runServer() throws IOException {
         boolean serverActive = true;
-        // mqttConnect();
+        mqttConnect();
         while(serverActive) {
             try {
                 clientSocket = mss.accept();

@@ -59,7 +59,7 @@ public class MQTT_PubPayload {
         this.seq = seq;
     }
 
-    public void setData(int lat, int lon) {
+    public void setData(float lat, float lon) {
         data.setData(lat, lon);
     }
 
@@ -69,21 +69,21 @@ public class MQTT_PubPayload {
 }
 
 class GPS_data {
-    private int lat = 0;
-    private int lon = 0;
+    private float lat = 0;
+    private float lon = 0;
 
     public GPS_data() {}
 
-    public void setData(int lat, int lon) {
+    public void setData(float lat, float lon) {
         this.lat = lat;
         this.lon = lon;
     }
 
-    public int getLat() {
+    public float getLat() {
         return lat;
     }
 
-    public int getLon() {
+    public float getLon() {
         return lon;
     }
 }

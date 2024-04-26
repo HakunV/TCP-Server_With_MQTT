@@ -101,9 +101,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    // public void publish(float lat, float lon) {
-    //     server.mqttClient.publish(lat, lon);
-    // }
+    public void publish(float lat, float lon) {
+        server.mqttClient.publish(lat, lon);
+    }
 
     public void respondToStatus(String isn) throws IOException {
         cw.respondStandard("13", isn);

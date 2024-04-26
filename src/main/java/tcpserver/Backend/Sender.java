@@ -50,12 +50,11 @@ public class Sender {
         int flags = Integer.parseInt("11000010", 2);
         tempMes += String.format("%02X", flags);
 
-        int aliveMSB = Integer.parseInt("00000000", 2);
+        int aliveMSB = Integer.parseInt("00000011", 2);
         tempMes += String.format("%02X", aliveMSB);
 
-        int aliveLSB = Integer.parseInt("01111000", 2);
+        int aliveLSB = Integer.parseInt("11111111", 2);
         tempMes += String.format("%02X", aliveLSB);
-
 
         
         // Payload
@@ -131,11 +130,12 @@ public class Sender {
         // Payload
 
         // Convert the latitude and longitude to integer, so it corresponds to the conversion on server side
-        float tempLat = (float) (lat+90)*upscaleFactor;
-        float tempLon = (float) (lon+180)*upscaleFactor;
+        // float tempLat = (float) (lat+90)*upscaleFactor;
+        // float tempLon = (float) (lon+180)*upscaleFactor;
 
-        String payload = getJSON((int) tempLat, (int) tempLon);
-        String payloadHex = gpsPayloadToHex(payload);
+        String payload = getJSON(lat, lon);
+        // String payloadHex = gpsPayloadToHex(payload);
+        String payloadHex = textToHex(payload);
 
         tempMes += payloadHex;
 
@@ -290,19 +290,26 @@ public class Sender {
      * [4]: Channel
      * [5]: Signal aka RSSI
      */
-    public String getJSON(int lat, int lon) {
-        String[] wifi_config = wc.configure();
+    public String getJSON(float lat, float lon) {
+        // String[] wifi_config = wc.configure();
 
         mpp.setName("W15");
-        mpp.setMAC("8xQ6SK");
+        mpp.setMAC("U51Bqk");
         mpp.setTechnology("wifi");
-        mpp.setIP(wifi_config[0]);
-        mpp.setRssi(Integer.parseInt(wifi_config[5]));
-        mpp.setSsid(wifi_config[2]);
+        // mpp.setIP(wifi_config[0]);
+        mpp.setIP("10.209.216.197");
+        // mpp.setRssi(Integer.parseInt(wifi_config[5]));
+        mpp.setRssi(-40);
+        // mpp.setSsid(wifi_config[2]);
+        mpp.setSsid("eduroam");
         mpp.setHost("192.38.81.6");
-        mpp.setGwIP(wifi_config[1]);
-        mpp.setBSSID(wifi_config[3]);
-        mpp.setChannel(Integer.parseInt(wifi_config[4]));
+        // mpp.setGwIP(wifi_config[1]);
+        mpp.setGwIP("10.209.128.1");
+        // mpp.setBSSID(wifi_config[3]);
+        mpp.setBSSID("10:a8:29:a4:e9:4e");
+        // mpp.setChannel(Integer.parseInt(wifi_config[4]));
+        mpp.setChannel(44);
+        mpp.setSeq(5);
         mpp.setData(lat, lon);
         mpp.setAuthToken(nothingImportant);
 
@@ -336,39 +343,39 @@ public class Sender {
         return userHex;
     }
 
-    public String gpsPayloadToHex(String s) {
-        int lat = 0;
-        int lon = 0;
+    // public String gpsPayloadToHex(String s) {
+    //     int lat = 0;
+    //     int lon = 0;
 
-        int posLat = s.lastIndexOf("\"lat\":")+"\"lat\":".length();
-        int posLon = s.lastIndexOf("\"lon\":")+"\"lon\":".length();
+    //     int posLat = s.lastIndexOf("\"lat\":")+"\"lat\":".length();
+    //     int posLon = s.lastIndexOf("\"lon\":")+"\"lon\":".length();
 
-        int lastLat = s.lastIndexOf(",\"lon\":");
-        int lastLon = s.lastIndexOf("},\"AuthToken");
+    //     int lastLat = s.lastIndexOf(",\"lon\":");
+    //     int lastLon = s.lastIndexOf("},\"AuthToken");
 
-        char[] userArr = s.toCharArray();
-        String userHex = "";
-        for (int i = 0; i < userArr.length; i++) {
-            if (i == posLat) {
-                String latStr = s.substring(i, lastLat);
-                lat = Integer.parseInt(latStr);
+    //     char[] userArr = s.toCharArray();
+    //     String userHex = "";
+    //     for (int i = 0; i < userArr.length; i++) {
+    //         if (i == posLat) {
+    //             String latStr = s.substring(i, lastLat);
+    //             lat = Integer.parseInt(latStr);
 
-                userHex += String.format("%06x", lat);
-                i = i+latStr.length()-1;
-            }
-            else if (i == posLon) {
-                String lonStr = s.substring(i, lastLon);
-                lon = Integer.parseInt(lonStr);
+    //             userHex += String.format("%06x", lat);
+    //             i = i+latStr.length()-1;
+    //         }
+    //         else if (i == posLon) {
+    //             String lonStr = s.substring(i, lastLon);
+    //             lon = Integer.parseInt(lonStr);
 
-                userHex += String.format("%06x", lon);
-                i = i+lonStr.length()-1;
-            }
-            else {
-                userHex += String.format("%02X", (int) userArr[i]);
-            }
-        }
-        return userHex;
-    }
+    //             userHex += String.format("%06x", lon);
+    //             i = i+lonStr.length()-1;
+    //         }
+    //         else {
+    //             userHex += String.format("%02X", (int) userArr[i]);
+    //         }
+    //     }
+    //     return userHex;
+    // }
 
     public byte[] hexStrToByteArr(String data) {
         int len = data.length();
