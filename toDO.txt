@@ -1,0 +1,8 @@
+-   Server should differentiate between trackers
+
+-   Refine MQTT communication to DTU Backend
+
+-   Come up with downlink communication.
+    Suggestion:
+        Client sends JSON of commands to specific tracker via a new MQTT topic
+        which our server is subscribed to.
