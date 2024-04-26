@@ -60,7 +60,7 @@ public class ClientHandler implements Runnable {
                     /*
                      * The packet should always start with 7878
                      */
-                    if (dataString.substring(0, 2*byteSize).equals("7878")) {
+                    if (dataString.substring(0, 2*byteSize).equals("7878") || dataString.substring(0, 2*byteSize).equals("7979")) {
                         packetLength = Integer.parseInt(dataString.substring(2*byteSize, 3*byteSize), 16);
                         System.out.println("Length of the packet: " + packetLength);
                         System.out.println();
