@@ -294,7 +294,7 @@ public class Sender {
         // String[] wifi_config = wc.configure();
 
         mpp.setName("W15");
-        mpp.setMAC("U51Bqk");
+        mpp.setMAC("4IT7Sm");
         mpp.setTechnology("wifi");
         // mpp.setIP(wifi_config[0]);
         mpp.setIP("10.209.216.197");
