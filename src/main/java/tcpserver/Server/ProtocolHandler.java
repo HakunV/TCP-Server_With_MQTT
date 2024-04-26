@@ -27,6 +27,9 @@ public class ProtocolHandler {
                 handleLocation(dataString);
                 break;
             case "12":
+                System.out.println("Location Message");
+                System.out.println();
+                handleLocation(dataString);
                 break;
             case "13":
                 System.out.println("Status Message");
