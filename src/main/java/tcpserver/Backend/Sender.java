@@ -388,40 +388,6 @@ public class Sender {
         return userHex;
     }
 
-    // public String gpsPayloadToHex(String s) {
-    //     int lat = 0;
-    //     int lon = 0;
-
-    //     int posLat = s.lastIndexOf("\"lat\":")+"\"lat\":".length();
-    //     int posLon = s.lastIndexOf("\"lon\":")+"\"lon\":".length();
-
-    //     int lastLat = s.lastIndexOf(",\"lon\":");
-    //     int lastLon = s.lastIndexOf("},\"AuthToken");
-
-    //     char[] userArr = s.toCharArray();
-    //     String userHex = "";
-    //     for (int i = 0; i < userArr.length; i++) {
-    //         if (i == posLat) {
-    //             String latStr = s.substring(i, lastLat);
-    //             lat = Integer.parseInt(latStr);
-
-    //             userHex += String.format("%06x", lat);
-    //             i = i+latStr.length()-1;
-    //         }
-    //         else if (i == posLon) {
-    //             String lonStr = s.substring(i, lastLon);
-    //             lon = Integer.parseInt(lonStr);
-
-    //             userHex += String.format("%06x", lon);
-    //             i = i+lonStr.length()-1;
-    //         }
-    //         else {
-    //             userHex += String.format("%02X", (int) userArr[i]);
-    //         }
-    //     }
-    //     return userHex;
-    // }
-
     public byte[] hexStrToByteArr(String data) {
         int len = data.length();
         byte[] bytes = new byte[len / 2];
