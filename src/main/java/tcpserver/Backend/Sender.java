@@ -341,6 +341,10 @@ public class Sender {
                 res = jo.get("DeviceID").getAsString();
                 break;
             }
+            else {
+                System.out.println("Did not find IMEI");
+                System.out.println();
+            }
         }
 
         return res;
