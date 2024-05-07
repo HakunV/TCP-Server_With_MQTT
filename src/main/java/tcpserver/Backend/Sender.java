@@ -144,13 +144,13 @@ public class Sender {
         message += calcRemLen(mesLength);
         message += tempMes;
 
-        // try {
-        //     sendMessage(message, bos);
-        // }
-        // catch (IOException e) {
-        //     System.out.println("Could Not Send Publish Packet");
-        //     e.printStackTrace();
-        // }
+        try {
+            sendMessage(message, bos);
+        }
+        catch (IOException e) {
+            System.out.println("Could Not Send Publish Packet");
+            e.printStackTrace();
+        }
     }
 
     private String generatePacketID() {
@@ -170,7 +170,7 @@ public class Sender {
         String packetType = String.format("%01X", ackType);
         message += packetType;
 
-        if ( ackType == 6) {
+        if (ackType == 6) {
             String reserved = String.format("%01X", 2);
             message += reserved;
         } 
