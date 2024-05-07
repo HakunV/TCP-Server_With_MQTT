@@ -2,6 +2,7 @@ package tcpserver.Server;
 
 import java.io.*;
 import java.net.Socket;
+import java.sql.Timestamp;
 
 public class ClientHandler implements Runnable {
     private Socket socket;
@@ -52,7 +53,7 @@ public class ClientHandler implements Runnable {
 
                     dataString = toLowerCase(dataString); // If the hexadecimal is uppercase
 
-                    System.out.println("Input: " + dataString);
+                    System.out.println("Input: " + dataString + "   " + ts());
                     System.out.println();
 
                     int len = dataString.length();
@@ -102,7 +103,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void publish(float lat, float lon) {
-        server.mqttClient.publish(lat, lon);
+        server.mqttClient.publish(imei, lat, lon);
     }
 
     public void respondToStatus(String isn) throws IOException {
@@ -234,4 +235,7 @@ public class ClientHandler implements Runnable {
         return res.equalsIgnoreCase(comp);
     }
     
+    public static String ts() {
+        return "Timestamp: " + new Timestamp(new java.util.Date().getTime());
+    }
 }

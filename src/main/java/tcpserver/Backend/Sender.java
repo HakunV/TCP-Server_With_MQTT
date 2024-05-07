@@ -2,8 +2,13 @@ package tcpserver.Backend;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.util.Random;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class Sender {
     private BackendClient bc = null;
@@ -98,7 +103,7 @@ public class Sender {
         }
     }
 
-    public void sendPublish(float lat, float lon) {
+    public void sendPublish(String device, float lat, float lon) {
         String message = "";
         String tempMes = "";
 
@@ -109,7 +114,7 @@ public class Sender {
 
         String dup = pubDup ? "1" : "0";
         String qos = "01";
-        String retain = "1";
+        String retain = "0";
         message += String.format("%01X", Integer.parseInt(dup+qos+retain, 2));
 
         // Variable Header
@@ -121,20 +126,14 @@ public class Sender {
         tempMes += String.format("%04X", topicLength);
         tempMes += topicHex;
 
-        String packetID = "";
         if (Integer.parseInt(qos) > 0) {
-            packetID = "24583";
+            String packetID = generatePacketID();
             tempMes += String.format("%04X", Integer.parseInt(packetID));
         }
 
         // Payload
 
-        // Convert the latitude and longitude to integer, so it corresponds to the conversion on server side
-        // float tempLat = (float) (lat+90)*upscaleFactor;
-        // float tempLon = (float) (lon+180)*upscaleFactor;
-
-        String payload = getJSON(lat, lon);
-        // String payloadHex = gpsPayloadToHex(payload);
+        String payload = getJSON(device , lat, lon);
         String payloadHex = textToHex(payload);
 
         tempMes += payloadHex;
@@ -145,13 +144,21 @@ public class Sender {
         message += calcRemLen(mesLength);
         message += tempMes;
 
-        try {
-            sendMessage(message, bos);
-        }
-        catch (IOException e) {
-            System.out.println("Could Not Send Publish Packet");
-            e.printStackTrace();
-        }
+        // try {
+        //     sendMessage(message, bos);
+        // }
+        // catch (IOException e) {
+        //     System.out.println("Could Not Send Publish Packet");
+        //     e.printStackTrace();
+        // }
+    }
+
+    private String generatePacketID() {
+        int min = 10000;
+        int max = 99999;
+
+        int id = (int) (Math.random()*(max-min+1)+min);
+        return Integer.toString(id);
     }
 
     public void sendPubacks(int packetInt, int ackType) {
@@ -290,11 +297,13 @@ public class Sender {
      * [4]: Channel
      * [5]: Signal aka RSSI
      */
-    public String getJSON(float lat, float lon) {
+    public String getJSON(String device, float lat, float lon) {
         // String[] wifi_config = wc.configure();
 
-        mpp.setName("W15");
-        mpp.setMAC("4IT7Sm");
+        String mac = imeiToDeviceID(device);
+
+        mpp.setName("");
+        mpp.setMAC(mac);
         mpp.setTechnology("wifi");
         // mpp.setIP(wifi_config[0]);
         mpp.setIP("10.209.216.197");
@@ -310,7 +319,7 @@ public class Sender {
         // mpp.setChannel(Integer.parseInt(wifi_config[4]));
         mpp.setChannel(44);
         mpp.setSeq(5);
-        mpp.setData(lat, lon);
+        mpp.setData(lat, lon, device);
         mpp.setAuthToken(nothingImportant);
 
         Gson gson = new Gson();
@@ -318,6 +327,38 @@ public class Sender {
 
         System.out.println(json);
         return json;
+    }
+
+    private String imeiToDeviceID(String device) {
+        String res = "";
+
+        JsonArray ja = convertFileToJSON("C:/Users/mariu/Development/Bachelor/tcpserver/src/main/java/tcpserver/Devices.json");
+
+        for (JsonElement je : ja) {
+            JsonObject jo = je.getAsJsonObject();
+
+            if (jo.get("IMEI").getAsString().equals(device)) {
+                res = jo.get("DeviceID").getAsString();
+                break;
+            }
+        }
+
+        return res;
+    }
+
+    private static JsonArray convertFileToJSON (String fileName){
+
+        // Read from File to String
+        JsonArray jsonArray = new JsonArray();
+        
+        try {
+            JsonParser parser = new JsonParser();
+            JsonElement jsonElement = parser.parse(new FileReader(fileName));
+            jsonArray = jsonElement.getAsJsonArray();
+        } catch (FileNotFoundException e) {
+           
+        }
+        return jsonArray;
     }
 
     public void sendMessage(String mes, BufferedOutputStream bos) throws IOException {

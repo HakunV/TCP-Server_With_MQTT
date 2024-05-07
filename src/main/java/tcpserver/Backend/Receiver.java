@@ -42,7 +42,7 @@ public class Receiver implements Runnable {
             }
         }
         catch (IOException e) {
-            System.out.println("Failed To Read the Bis");
+            System.out.println("Failed To Read the Bis MQTT");
             e.printStackTrace();
         }
     }

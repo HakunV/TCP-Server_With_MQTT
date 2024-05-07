@@ -17,7 +17,7 @@ public class BackendClient implements Runnable {
     private Sender s = null;
 
     private boolean active = true;
-    private int keepAlive = 5000;
+    private int keepAlive = 120;
 
     public BackendClient() {
         this.waiter = new Object();
@@ -42,7 +42,6 @@ public class BackendClient implements Runnable {
     public void run() {
         connect();
 
-        // publish((float) 50.3218, (float) 13.8273);
         while (active) {
             
         }
@@ -64,8 +63,8 @@ public class BackendClient implements Runnable {
         System.out.println();
     }
 
-    public void publish(float lat, float lon) {
-        s.sendPublish(lat, lon);
+    public void publish(String device, float lat, float lon) {
+        s.sendPublish(device, lat, lon);
     }
 
     public void subscribe() {
@@ -76,7 +75,7 @@ public class BackendClient implements Runnable {
         s.sendUnsubscribe();
     }
 
-    private void setKeepAlive(int x) {
+    public void setKeepAlive(int x) {
         keepAlive = x;
     }
 }

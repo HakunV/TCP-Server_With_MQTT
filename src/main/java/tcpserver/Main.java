@@ -14,6 +14,12 @@ public class Main {
 
         // BackendClient backendClient = new BackendClient();
 
-        // backendClient.run();
+        // backendClient.publish("355688700322392", (float) 30.2324, (float) 13.2390);
+
+        // Thread th = new Thread(backendClient);
+
+        // th.start();
+        // backendClient.publish("355688700322392", (float) 30.2324, (float) 13.2390);
+        // backendClient.publish("353994711603560", (float) 47.5432, (float) 9.2342);
     }
 }

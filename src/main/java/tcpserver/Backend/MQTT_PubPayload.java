@@ -59,8 +59,8 @@ public class MQTT_PubPayload {
         this.seq = seq;
     }
 
-    public void setData(float lat, float lon) {
-        data.setData(lat, lon);
+    public void setData(float lat, float lon, String imei) {
+        data.setData(lat, lon, imei);
     }
 
     public void setAuthToken(String authToken) {
@@ -71,12 +71,14 @@ public class MQTT_PubPayload {
 class GPS_data {
     private float lat = 0;
     private float lon = 0;
+    private String imei = "";
 
     public GPS_data() {}
 
-    public void setData(float lat, float lon) {
+    public void setData(float lat, float lon, String imei) {
         this.lat = lat;
         this.lon = lon;
+        this.imei = imei;
     }
 
     public float getLat() {
@@ -85,5 +87,9 @@ class GPS_data {
 
     public float getLon() {
         return lon;
+    }
+
+    public String getImei() {
+        return imei;
     }
 }
