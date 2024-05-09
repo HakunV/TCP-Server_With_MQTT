@@ -48,7 +48,7 @@ public class BackendClient implements Runnable {
     }
 
     public void connect() {
-        s.sendConnect();
+        s.connect();
 
         while(!r.getConAcc()) {
             synchronized(waiter) {
@@ -64,11 +64,11 @@ public class BackendClient implements Runnable {
     }
 
     public void publish(String device, float lat, float lon) {
-        s.sendPublish(device, lat, lon);
+        s.publish(device, lat, lon);
     }
 
     public void subscribe() {
-        s.sendSubscribe();
+        s.subscribe(new String[] {"DTU-IWP-DeviceData"});
     }
 
     public void unsubscribe() {

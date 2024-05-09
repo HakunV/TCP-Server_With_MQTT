@@ -1,6 +1,27 @@
-package tcpserver.Server;
+package tcpserver.Helpers;
 
-public class CRC_Table {
+public class GT06 {
+    /*
+     * The GT06-packets always starts with "7878" and ends with "0d0a"
+     * This is used when sending packets to the client
+     */
+    public static String addStartEnd(String str) {
+        return "7878" + str + "0d0a";
+    }
+
+    public static String crcCalc(String data) {
+        byte[] dataArr = Helpers.hexStrToByteArr(data);
+        CRC_Table crcObj = new CRC_Table();
+        return crcObj.getCRC(dataArr);
+    }
+
+    public static boolean errorCheck(String data, String comp) {
+        String res = crcCalc(data);
+        return res.equalsIgnoreCase(comp);
+    }
+}
+
+class CRC_Table {
     public int[] table = {
         0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf, 
         0x8c48, 0x9dc1, 0xaf5a, 0xbed3, 0xca6c, 0xdbe5, 0xe97e, 0xf8f7, 
@@ -46,6 +67,5 @@ public class CRC_Table {
         System.out.println();
 
         return Integer.toHexString(crc^0xffff);
-        // return Integer.toHexString(~crc);
     }
 }

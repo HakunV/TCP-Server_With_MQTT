@@ -1,5 +1,7 @@
 package tcpserver.Backend;
 
+import tcpserver.Helpers.Helpers;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
@@ -28,11 +30,11 @@ public class Receiver implements Runnable {
         try {
             while (running) {
                 while ((nRead = bis.read(dataT)) != -1) {
-                    byte[] data = byteCutoff(dataT, nRead);
+                    byte[] data = Helpers.byteCutoff(dataT, nRead);
 
-                    dataString = byteToHex(data);
-                    dataString = removeWhiteSpace(dataString);
-                    dataString = toLowerCase(dataString);
+                    dataString = Helpers.byteToHex(data);
+                    dataString = Helpers.removeWhiteSpace(dataString);
+                    dataString = Helpers.toLowerCase(dataString);
 
                     System.out.println("Input: " + dataString);
                     System.out.println();
@@ -48,58 +50,7 @@ public class Receiver implements Runnable {
     }
 
     public void sendPubacks(int packetID, int ackType) {
-        s.sendPubacks(packetID, ackType);
-    }
-
-    public byte[] byteCutoff(byte[] dataT, int nRead) {
-        byte[] d = new byte[nRead];
-
-        for (int i = 0; i < nRead; i++) {
-            d[i] = dataT[i];
-        }
-        return d;
-    }
-
-    public String removeWhiteSpace(String in) {
-        String out = "";
- 
-        for (int i = 0; i < in.length(); i++) {
-            char ch = in.charAt(i);
- 
-            // Checking whether is white space or not
-            if (!Character.isWhitespace(ch)) {
-                out += ch;
-            }
-        }
-        return out;
-    }
-
-    public String byteToHex(byte[] byteArray) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : byteArray) {
-            sb.append(String.format("%02X ", b));
-        }
-        return sb.toString();
-    }
-
-    public String toLowerCase(String str) {
-        String res = "";
-
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-
-            if (!Character.isDigit(c)) {
-                char cLower = c;
-                if (Character.isUpperCase(c)) {
-                    cLower = (char) (c ^ 0x20);
-                }
-                res += cLower;
-            }
-            else {
-                res += c;
-            } 
-        }
-        return res;
+        s.pubacks(packetID, ackType);
     }
 
     public void setConAcc(boolean b) {

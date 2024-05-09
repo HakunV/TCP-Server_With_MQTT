@@ -1,5 +1,8 @@
 package tcpserver.Server;
 
+import tcpserver.Helpers.Helpers;
+import tcpserver.Helpers.GT06;
+
 import java.io.*;
 
 public class ClientWriter {
@@ -31,14 +34,14 @@ public class ClientWriter {
         String packLenStr = String.format("%02X", packLenInt);
         
         respond = packLenStr + protNum + serialNum;
-        String crc = client.crcCalc(respond);
+        String crc = GT06.crcCalc(respond);
         respond += crc;
 
-        respond = client.addStartEnd(respond);
+        respond = GT06.addStartEnd(respond);
         System.out.println("Respond: " + respond);
         System.out.println();
 
-        byte[] bArr = client.hexStrToByteArr(respond);
+        byte[] bArr = Helpers.hexStrToByteArr(respond);
 
         output.write(bArr);
         output.flush();
@@ -65,18 +68,12 @@ public class ClientWriter {
         String packLenStr = String.format("%02X", packLenInt);
 
         respond = packLenStr + respond;
-        String crc = client.crcCalc(respond);
+        String crc = GT06.crcCalc(respond);
         respond += crc;
 
-        respond = client.addStartEnd(respond);
+        respond = GT06.addStartEnd(respond);
 
-        System.out.println("Final Command Message: " + respond);
-        System.out.println();
-
-        byte[] bArr = client.hexStrToByteArr(respond);
-
-        output.write(bArr);
-        output.flush();
+        Helpers.sendMessage(respond, output);
     }
 
     public String getCommand(String str) {
