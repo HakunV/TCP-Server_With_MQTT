@@ -124,12 +124,14 @@ public class Sender {
 
         int topicLength = topicHex.length()/2;
         tempMes += String.format("%04X", topicLength);
+
         tempMes += topicHex;
 
         if (Integer.parseInt(qos) > 0) {
-            String packetID = generatePacketID();
-            tempMes += String.format("%04X", Integer.parseInt(packetID));
+            int packetID = generatePacketID();
+            tempMes += String.format("%04X", packetID);
         }
+
 
         // Payload
 
@@ -142,6 +144,7 @@ public class Sender {
 
         int mesLength = tempMes.length()/2;
         message += calcRemLen(mesLength);
+
         message += tempMes;
 
         try {
@@ -153,12 +156,12 @@ public class Sender {
         }
     }
 
-    private String generatePacketID() {
+    private int generatePacketID() {
         int min = 10000;
-        int max = 99999;
+        int max = 65534;
 
         int id = (int) (Math.random()*(max-min+1)+min);
-        return Integer.toString(id);
+        return id;
     }
 
     public void sendPubacks(int packetInt, int ackType) {
@@ -390,6 +393,12 @@ public class Sender {
 
     public byte[] hexStrToByteArr(String data) {
         int len = data.length();
+
+        if (len % 2 == 1) {
+            System.out.println("Message is uneven");
+            System.out.println();
+        }
+
         byte[] bytes = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             bytes[i / 2] = (byte) ((Character.digit(data.charAt(i), 16) << 4)
