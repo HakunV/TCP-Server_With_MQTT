@@ -119,7 +119,7 @@ public class Publish {
     private static String imeiToDeviceID(String device) {
         String res = "";
 
-        JsonArray ja = convertFileToJSON("C:\\Users\\mariu\\Development\\Bachelor\\tcpserver\\src\\main\\java\\tcpserver\\Devices.json");
+        JsonArray ja = convertFileToJSON("/Users/mariu/Development/Bachelor/tcpserver/src/main/java/tcpserver/Devices.json");
 
         System.out.println("Array: " + ja);
 
