@@ -32,23 +32,34 @@ public class Sender {
     }
 
     public void publish(String device, float lat, float lon) {
-        send(Publish.publish(device, lat, lon, new PublishOptions()));
+        PublishOptions po = new PublishOptions();
+        String[] pubArr = Publish.publish(device, lat, lon, po);
+        bc.getComFlow().createFlow(true, Integer.parseInt(pubArr[0]), po.getQos(), pubArr[1]);
+        send(pubArr[1]);
     }
 
     public void publish(String device, float lat, float lon, PublishOptions po) {
-        send(Publish.publish(device, lat, lon, po));
+        String[] pubArr = Publish.publish(device, lat, lon, po);
+        bc.getComFlow().createFlow(true, Integer.parseInt(pubArr[0]), po.getQos(), pubArr[1]);
+        send(pubArr[1]);
     }
 
-    public void pubacks(int packetInt, int ackType) {
-        send(Pubacks.pubacks(packetInt, ackType));
+    public String pubacks(int packetID, int ackType) {
+        String message = Pubacks.pubacks(packetID, ackType);
+        send(message);
+        return message;
     }
 
     public void subscribe(String[] topics) {
-        send(Subscribe.subscribe(topics, new SubscribeOptions(topics.length)));
+        String[] subArr = Subscribe.subscribe(topics, new SubscribeOptions(topics.length));
+        bc.getComFlow().createFlow(true, Integer.parseInt(subArr[0]), 1, subArr[1]);
+        send(subArr[1]);
     }
 
     public void subscribe(String[] topics, SubscribeOptions so) {
-        send(Subscribe.subscribe(topics, so));
+        String[] subArr = Subscribe.subscribe(topics, new SubscribeOptions(topics.length));
+        bc.getComFlow().createFlow(true, Integer.parseInt(subArr[0]), 1, subArr[1]);
+        send(subArr[1]);
     }
 
     public void sendUnsubscribe() {

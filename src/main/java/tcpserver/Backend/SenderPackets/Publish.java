@@ -19,7 +19,7 @@ public class Publish {
 
     private static String nothingImportant = "6a2b0454-7bcb-46eb-8e77-37005d22d72c";
     
-    public static String publish(String device, float lat, float lon, PublishOptions po) {
+    public static String[] publish(String device, float lat, float lon, PublishOptions po) {
         String message = "";
         String tempMes = "";
 
@@ -53,8 +53,9 @@ public class Publish {
         tempMes += String.format("%04X", topicLength);
         tempMes += topicHex;
 
+        String packetID = "";
         if (Integer.parseInt(qos) > 0) {
-            String packetID = MQTT.generatePacketID();
+            packetID = MQTT.generatePacketID();
             tempMes += String.format("%04X", Integer.parseInt(packetID));
         }
 
@@ -71,7 +72,7 @@ public class Publish {
         message += MQTT.calcRemLen(mesLength);
         message += tempMes;
 
-        return message;
+        return new String[] {packetID, message};
     }
 
     /*

@@ -6,7 +6,7 @@ import tcpserver.Helpers.MQTT;
 public class Publish {
     private static int byteSize = Helpers.getByteSize();
     
-    public static int publish(String str) {
+    public static int[] publish(String str) {
         int pointer = 0;
 
         // Fixed Header
@@ -59,6 +59,6 @@ public class Publish {
         System.out.println(payload);
         System.out.println();
 
-        return qos;
+        return new int[] {packetID, qos};
     }
 }

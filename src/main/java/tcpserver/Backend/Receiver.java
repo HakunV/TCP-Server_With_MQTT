@@ -1,12 +1,13 @@
 package tcpserver.Backend;
 
+import tcpserver.Backend.CommunicationFlow.ComFlow;
 import tcpserver.Helpers.Helpers;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
 public class Receiver implements Runnable {
-    private Sender s = null;
+    private ComFlow cf = null;
     private BufferedInputStream bis = null;
     private MQTT_ProtocolHandler mph = null;
     public Object waiter = null;
@@ -15,8 +16,8 @@ public class Receiver implements Runnable {
 
     private boolean conAcc = false;
 
-    public Receiver(Sender s, BufferedInputStream bis, Object waiter) {
-        this.s = s;
+    public Receiver(ComFlow cf, BufferedInputStream bis, Object waiter) {
+        this.cf = cf;
         this.bis = bis;
         this.mph = new MQTT_ProtocolHandler(this);
         this.waiter = waiter;
@@ -49,10 +50,6 @@ public class Receiver implements Runnable {
         }
     }
 
-    public void sendPubacks(int packetID, int ackType) {
-        s.pubacks(packetID, ackType);
-    }
-
     public void setConAcc(boolean b) {
         this.conAcc = b;
     }
@@ -63,5 +60,9 @@ public class Receiver implements Runnable {
         synchronized(waiter) {
             waiter.notify();
         }
+    }
+
+    public ComFlow getComFlow() {
+        return this.cf;
     }
 }

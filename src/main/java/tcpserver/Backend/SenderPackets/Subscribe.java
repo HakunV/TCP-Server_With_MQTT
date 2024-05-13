@@ -6,7 +6,7 @@ import tcpserver.Helpers.MQTT;
 
 public class Subscribe {
     
-    public static String subscribe(String[] topics, SubscribeOptions so) {
+    public static String[] subscribe(String[] topics, SubscribeOptions so) {
         String message = "";
         String tempMes = "";
 
@@ -55,6 +55,6 @@ public class Subscribe {
         message += MQTT.calcRemLen(mesLength);
         message += tempMes;
 
-        return message;
+        return new String[] {packetID, message};
     }
 }

@@ -5,12 +5,10 @@ import tcpserver.Backend.HandlePackets.*;
 
 public class MQTT_ProtocolHandler {
     private Receiver r = null;
-    private ComFlow cf = null;
     private int byteSize = 2;
 
     public MQTT_ProtocolHandler(Receiver r) {
         this.r = r;
-        this.cf = new ComFlow();
     }
 
     public void handleMessage(String str) {
@@ -28,32 +26,33 @@ public class MQTT_ProtocolHandler {
             case "3":
                 System.out.println("Publish Message Received:");
                 System.out.println();
-                if (Publish.publish(str) == 1) {
-                    r.sendPubacks(packetID, 4);
+                int[] pubRes = Publish.publish(str);
+                if (pubRes[1] == 1) {
+                    r.getComFlow().createFlow(false, pubRes[0], pubRes[1], "");
                 }
-                else if (Publish.publish(str) == 2) {
-                    r.sendPubacks(packetID, 5);
+                else if (pubRes[1] == 2) {
+                    r.getComFlow().createFlow(false, pubRes[0], pubRes[1], "");
                 }
                 break;
             case "4":
                 System.out.println("Puback Message Received:");
                 System.out.println();
-                cf.acks(Pubacks.pubacks(str), 4);
+                r.getComFlow().update(Pubacks.pubacks(str), 4);
                 break;
             case "5":
                 System.out.println("Pubrec Message Received:");
                 System.out.println();
-                Pubacks.pubacks(str);
+                r.getComFlow().update(Pubacks.pubacks(str), 4);
                 break;
             case "6":
                 System.out.println("Pubrel Message Received:");
                 System.out.println();
-                Pubacks.pubacks(str);
+                r.getComFlow().update(Pubacks.pubacks(str), 4);
                 break;
             case "7":
                 System.out.println("Pubcomp Message Received:");
                 System.out.println();
-                Pubacks.pubacks(str);
+                r.getComFlow().update(Pubacks.pubacks(str), 4);
                 break;
             case "9":
                 System.out.println("Suback Message Received:");
