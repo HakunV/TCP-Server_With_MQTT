@@ -17,7 +17,8 @@ public class BackendClient implements Runnable {
     private Sender s = null;
 
     private boolean active = true;
-    private int keepAlive = 120;
+    private int keepAliveInterval = 120;
+    private long keepAliveLimit = 0;
 
     public BackendClient() {
         this.waiter = new Object();
@@ -40,15 +41,21 @@ public class BackendClient implements Runnable {
     }
 
     public void run() {
-        connect();
+        this.keepAliveInterval = connect();
+        setDownTime();
 
         while (active) {
             
+
+            if (System.currentTimeMillis() >= keepAliveLimit) {
+                s.ping();
+                setDownTime();
+            }
         }
     }
 
-    public void connect() {
-        s.connect();
+    public int connect() {
+        int keepAliveTime = s.connect();
 
         while(!r.getConAcc()) {
             synchronized(waiter) {
@@ -61,6 +68,8 @@ public class BackendClient implements Runnable {
         }
         System.out.println("Granted Access");
         System.out.println();
+
+        return keepAliveTime;
     }
 
     public void publish(String device, float lat, float lon) {
@@ -75,7 +84,7 @@ public class BackendClient implements Runnable {
         s.sendUnsubscribe();
     }
 
-    public void setKeepAlive(int x) {
-        keepAlive = x;
+    public void setDownTime() {
+        this.keepAliveLimit = System.currentTimeMillis() + (keepAliveInterval - 5) * 1000;
     }
 }

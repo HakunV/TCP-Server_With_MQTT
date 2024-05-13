@@ -19,12 +19,16 @@ public class Sender {
         this.wc = new WiFi_Config();
     }
 
-    public void connect() {
-        send(Connect.connect(new ConnectOptions()));;
+    public int connect() {
+        String[] res = Connect.connect(new ConnectOptions());
+        send(res[0]);
+        return Integer.parseInt(res[1]);
     }
 
-    public void connect(ConnectOptions co) {
-        send(Connect.connect(co));
+    public int connect(ConnectOptions co) {
+        String[] res = Connect.connect(new ConnectOptions());
+        send(res[0]);
+        return Integer.parseInt(res[1]);
     }
 
     public void publish(String device, float lat, float lon) {

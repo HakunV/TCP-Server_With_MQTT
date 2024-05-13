@@ -6,7 +6,7 @@ import tcpserver.Helpers.MQTT;
 
 public class Connect {
 
-    public static String connect(ConnectOptions co) {
+    public static String[] connect(ConnectOptions co) {
         String tempMes = "";
         String message = "";
 
@@ -70,7 +70,7 @@ public class Connect {
         message += MQTT.calcRemLen(mesLength);
         message += tempMes;
 
-        return message;
+        return new String[] {message, Integer.toString(co.getKeepAlive())};
     }
 
     private static String flags(ConnectOptions co) {
