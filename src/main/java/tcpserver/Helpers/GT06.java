@@ -63,9 +63,9 @@ class CRC_Table {
             crc = (crc >> 8) ^ table[(crc ^ (int) b) & 0xff];
         }
 
-        System.out.println("CRC16 = " + Integer.toHexString(crc^0xffff));
+        System.out.println("CRC16 = " + String.format("%04X", crc^0xffff));
         System.out.println();
 
-        return Integer.toHexString(crc^0xffff);
+        return String.format("%04X", crc^0xffff);
     }
 }
