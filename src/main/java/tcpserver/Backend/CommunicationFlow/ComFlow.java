@@ -14,7 +14,7 @@ public class ComFlow {
     }
 
     public void createFlow(boolean sender, int packetID, int qos, String message) {
-        if (getFlow(packetID) != null) {
+        if (getFlow(packetID) == null) {
             if (sender) {
                 flows.add(new Flow(sender, packetID, qos, message));
             }
@@ -32,6 +32,9 @@ public class ComFlow {
 
     public void update(int packetID, int ackType) {
         Flow f = getFlow(packetID);
+
+        System.out.println("Flow Array: " + flows);
+        System.out.println("Flow: " + f);
 
         if (f != null) {
             State s = f.getState();

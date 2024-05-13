@@ -54,7 +54,8 @@ public class BackendClient implements Runnable {
         System.out.println();
         setDownTime();
 
-        publish("355688700322392", (float) 55.43223, (float) 13.12313);
+        // publish("355688700322392", (float) 55.43223, (float) 13.12313);
+        subscribe();
         while (active) {
             
 

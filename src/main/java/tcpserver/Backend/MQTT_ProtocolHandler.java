@@ -42,17 +42,17 @@ public class MQTT_ProtocolHandler {
             case "5":
                 System.out.println("Pubrec Message Received:");
                 System.out.println();
-                r.getComFlow().update(Pubacks.pubacks(str), 4);
+                r.getComFlow().update(Pubacks.pubacks(str), 5);
                 break;
             case "6":
                 System.out.println("Pubrel Message Received:");
                 System.out.println();
-                r.getComFlow().update(Pubacks.pubacks(str), 4);
+                r.getComFlow().update(Pubacks.pubacks(str), 6);
                 break;
             case "7":
                 System.out.println("Pubcomp Message Received:");
                 System.out.println();
-                r.getComFlow().update(Pubacks.pubacks(str), 4);
+                r.getComFlow().update(Pubacks.pubacks(str), 7);
                 break;
             case "9":
                 System.out.println("Suback Message Received:");

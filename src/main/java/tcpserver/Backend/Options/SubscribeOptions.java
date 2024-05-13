@@ -7,7 +7,7 @@ public class SubscribeOptions {
         this.qos = new int[length];
 
         for (int i = 0; i < length; i++) {
-            this.qos[i] = 0;
+            this.qos[i] = 1;
         }
     }
 
