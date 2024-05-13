@@ -58,7 +58,7 @@ public class MQTT {
      */
     public static String generatePacketID() {
         int min = 10000;
-        int max = 99999;
+        int max = 60000;
 
         int id = (int) (Math.random()*(max-min+1)+min);
         return Integer.toString(id);

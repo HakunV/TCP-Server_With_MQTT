@@ -6,6 +6,7 @@ import java.util.*;
 
 import tcpserver.Backend.CommunicationFlow.ComFlow;
 import tcpserver.Backend.Options.ConnectOptions;
+import tcpserver.Backend.Options.PublishOptions;
 
 public class BackendClient implements Runnable {
     private Socket client = null;
@@ -50,8 +51,10 @@ public class BackendClient implements Runnable {
     public void run() {
         this.keepAliveInterval = connect();
         System.out.println("keepAliveInterval: " + keepAliveInterval);
+        System.out.println();
         setDownTime();
 
+        publish("355688700322392", (float) 55.43223, (float) 13.12313);
         while (active) {
             
 
@@ -84,7 +87,9 @@ public class BackendClient implements Runnable {
     }
 
     public void publish(String device, float lat, float lon) {
-        s.publish(device, lat, lon);
+        PublishOptions po = new PublishOptions();
+        po.setQos(2);
+        s.publish(device, lat, lon, po);
     }
 
     public void subscribe() {
