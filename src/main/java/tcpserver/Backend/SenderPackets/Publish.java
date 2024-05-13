@@ -151,7 +151,7 @@ public class Publish {
             JsonElement jsonElement = parser.parse(new FileReader(fileName));
             jsonArray = jsonElement.getAsJsonArray();
         } catch (FileNotFoundException e) {
-           
+           System.out.println("Could not parse file");
         }
         return jsonArray;
     }
