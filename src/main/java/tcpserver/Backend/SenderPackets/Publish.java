@@ -142,16 +142,20 @@ public class Publish {
     }
 
     private static JsonArray convertFileToJSON (String fileName){
+        System.out.println("File: " + fileName);
 
         // Read from File to String
         JsonArray jsonArray = new JsonArray();
         
         try {
             JsonParser parser = new JsonParser();
+            System.out.println("Parser: " + parser);
             JsonElement jsonElement = parser.parse(new FileReader(fileName));
+            System.out.println("Element: " + jsonElement);
             jsonArray = jsonElement.getAsJsonArray();
         } catch (FileNotFoundException e) {
            System.out.println("Could not parse file");
+           e.printStackTrace();
         }
         return jsonArray;
     }
