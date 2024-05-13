@@ -121,6 +121,8 @@ public class Publish {
 
         JsonArray ja = convertFileToJSON("C:/Users/mariu/Development/Bachelor/tcpserver/src/main/java/tcpserver/Devices.json");
 
+        System.out.println("Array: " + ja);
+
         for (JsonElement je : ja) {
             JsonObject jo = je.getAsJsonObject();
 

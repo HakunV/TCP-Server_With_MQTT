@@ -67,10 +67,7 @@ public class BackendClient implements Runnable {
     }
 
     public int connect() {
-        ConnectOptions co = new ConnectOptions();
-        co.setKeepAlive(30);
-
-        int keepAliveTime = s.connect(co);
+        int keepAliveTime = s.connect();
 
         while(!r.getConAcc()) {
             synchronized(waiter) {
