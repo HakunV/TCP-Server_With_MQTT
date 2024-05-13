@@ -125,6 +125,8 @@ public class Publish {
             JsonObject jo = je.getAsJsonObject();
 
             if (jo.get("IMEI").getAsString().equals(device)) {
+                System.out.println("Yes, it equals");
+                System.out.println();
                 res = jo.get("DeviceID").getAsString();
                 break;
             }

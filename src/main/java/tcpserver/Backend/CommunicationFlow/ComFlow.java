@@ -33,9 +33,6 @@ public class ComFlow {
     public void update(int packetID, int ackType) {
         Flow f = getFlow(packetID);
 
-        System.out.println("Flow Array: " + flows);
-        System.out.println("Flow: " + f);
-
         if (f != null) {
             State s = f.getState();
 
