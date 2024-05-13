@@ -4,6 +4,10 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
+import tcpserver.Backend.CommunicationFlow.ComFlow;
+import tcpserver.Backend.Options.ConnectOptions;
+import tcpserver.Backend.Options.PublishOptions;
+
 public class BackendClient implements Runnable {
     private Socket client = null;
     private String ip = "thingsofinter.net";
@@ -16,8 +20,11 @@ public class BackendClient implements Runnable {
     private Receiver r = null;
     private Sender s = null;
 
+    private ComFlow cf = null;
+
     private boolean active = true;
-    private int keepAlive = 120;
+    private int keepAliveInterval = 120;
+    private long keepAliveLimit = 0;
 
     public BackendClient() {
         this.waiter = new Object();
@@ -30,7 +37,9 @@ public class BackendClient implements Runnable {
 
             s = new Sender(this, bos);
 
-            r = new Receiver(s, bis, this.waiter);
+            cf = new ComFlow(s);
+
+            r = new Receiver(cf, bis, this.waiter);
             new Thread(r).start();
         }
         catch(IOException e) {
@@ -40,15 +49,28 @@ public class BackendClient implements Runnable {
     }
 
     public void run() {
-        connect();
+        this.keepAliveInterval = connect();
+        System.out.println("keepAliveInterval: " + keepAliveInterval);
+        System.out.println();
+        setDownTime();
 
+        // publish("355688700322392", (float) 55.43223, (float) 13.12313);
+        subscribe();
         while (active) {
             
+
+            if (System.currentTimeMillis() >= keepAliveLimit) {
+                s.ping();
+                setDownTime();
+            }
         }
     }
 
-    public void connect() {
-        s.sendConnect();
+    public int connect() {
+        ConnectOptions co = new ConnectOptions();
+        co.setKeepAlive(30);
+
+        int keepAliveTime = s.connect(co);
 
         while(!r.getConAcc()) {
             synchronized(waiter) {
@@ -61,21 +83,29 @@ public class BackendClient implements Runnable {
         }
         System.out.println("Granted Access");
         System.out.println();
+
+        return keepAliveTime;
     }
 
     public void publish(String device, float lat, float lon) {
-        s.sendPublish(device, lat, lon);
+        PublishOptions po = new PublishOptions();
+        po.setQos(2);
+        s.publish(device, lat, lon, po);
     }
 
     public void subscribe() {
-        s.sendSubscribe();
+        s.subscribe(new String[] {"DTU-IWP-DeviceData"});
     }
 
     public void unsubscribe() {
         s.sendUnsubscribe();
     }
 
-    public void setKeepAlive(int x) {
-        keepAlive = x;
+    public void setDownTime() {
+        this.keepAliveLimit = System.currentTimeMillis() + (keepAliveInterval - 5) * 1000;
+    }
+
+    public ComFlow getComFlow() {
+        return cf;
     }
 }

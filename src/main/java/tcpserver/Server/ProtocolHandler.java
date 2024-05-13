@@ -1,5 +1,7 @@
 package tcpserver.Server;
 
+import tcpserver.Helpers.Helpers;
+
 import java.io.IOException;
 
 public class ProtocolHandler {
@@ -78,7 +80,7 @@ public class ProtocolHandler {
 
     private void handleLogin(String d, String isn) {
         String imei = d.substring(4*byteSize, 12*byteSize);
-        imei = client.removeProZeros(imei);
+        imei = Helpers.removeProZeros(imei);
         client.setName(imei);
         System.out.println("IMEI number: " + imei);
         System.out.println();

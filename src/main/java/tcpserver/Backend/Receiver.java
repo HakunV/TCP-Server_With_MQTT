@@ -1,10 +1,13 @@
 package tcpserver.Backend;
 
+import tcpserver.Backend.CommunicationFlow.ComFlow;
+import tcpserver.Helpers.Helpers;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
 public class Receiver implements Runnable {
-    private Sender s = null;
+    private ComFlow cf = null;
     private BufferedInputStream bis = null;
     private MQTT_ProtocolHandler mph = null;
     public Object waiter = null;
@@ -13,8 +16,8 @@ public class Receiver implements Runnable {
 
     private boolean conAcc = false;
 
-    public Receiver(Sender s, BufferedInputStream bis, Object waiter) {
-        this.s = s;
+    public Receiver(ComFlow cf, BufferedInputStream bis, Object waiter) {
+        this.cf = cf;
         this.bis = bis;
         this.mph = new MQTT_ProtocolHandler(this);
         this.waiter = waiter;
@@ -28,11 +31,11 @@ public class Receiver implements Runnable {
         try {
             while (running) {
                 while ((nRead = bis.read(dataT)) != -1) {
-                    byte[] data = byteCutoff(dataT, nRead);
+                    byte[] data = Helpers.byteCutoff(dataT, nRead);
 
-                    dataString = byteToHex(data);
-                    dataString = removeWhiteSpace(dataString);
-                    dataString = toLowerCase(dataString);
+                    dataString = Helpers.byteToHex(data);
+                    dataString = Helpers.removeWhiteSpace(dataString);
+                    dataString = Helpers.toLowerCase(dataString);
 
                     System.out.println("Input: " + dataString);
                     System.out.println();
@@ -47,61 +50,6 @@ public class Receiver implements Runnable {
         }
     }
 
-    public void sendPubacks(int packetID, int ackType) {
-        s.sendPubacks(packetID, ackType);
-    }
-
-    public byte[] byteCutoff(byte[] dataT, int nRead) {
-        byte[] d = new byte[nRead];
-
-        for (int i = 0; i < nRead; i++) {
-            d[i] = dataT[i];
-        }
-        return d;
-    }
-
-    public String removeWhiteSpace(String in) {
-        String out = "";
- 
-        for (int i = 0; i < in.length(); i++) {
-            char ch = in.charAt(i);
- 
-            // Checking whether is white space or not
-            if (!Character.isWhitespace(ch)) {
-                out += ch;
-            }
-        }
-        return out;
-    }
-
-    public String byteToHex(byte[] byteArray) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : byteArray) {
-            sb.append(String.format("%02X ", b));
-        }
-        return sb.toString();
-    }
-
-    public String toLowerCase(String str) {
-        String res = "";
-
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-
-            if (!Character.isDigit(c)) {
-                char cLower = c;
-                if (Character.isUpperCase(c)) {
-                    cLower = (char) (c ^ 0x20);
-                }
-                res += cLower;
-            }
-            else {
-                res += c;
-            } 
-        }
-        return res;
-    }
-
     public void setConAcc(boolean b) {
         this.conAcc = b;
     }
@@ -112,5 +60,9 @@ public class Receiver implements Runnable {
         synchronized(waiter) {
             waiter.notify();
         }
+    }
+
+    public ComFlow getComFlow() {
+        return this.cf;
     }
 }

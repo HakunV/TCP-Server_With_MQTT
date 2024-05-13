@@ -1,8 +1,10 @@
 package tcpserver.Server;
 
+import tcpserver.Helpers.Helpers;
+import tcpserver.Helpers.GT06;
+
 import java.io.*;
 import java.net.Socket;
-import java.sql.Timestamp;
 
 public class ClientHandler implements Runnable {
     private Socket socket;
@@ -46,14 +48,14 @@ public class ClientHandler implements Runnable {
         try {
             while (clientActive) {
                 while ((nRead = bis.read(dataT)) != -1) {
-                    byte[] data = byteCutoff(dataT, nRead); // Makes a new array with the size of nRead instead of 1024
-                    dataString = byteToHex(data);
+                    byte[] data = Helpers.byteCutoff(dataT, nRead); // Makes a new array with the size of nRead instead of 1024
+                    dataString = Helpers.byteToHex(data);
 
-                    dataString = removeWhiteSpace(dataString); // If there are whitespaces between bytes
+                    dataString = Helpers.removeWhiteSpace(dataString); // If there are whitespaces between bytes
 
-                    dataString = toLowerCase(dataString); // If the hexadecimal is uppercase
+                    dataString = Helpers.toLowerCase(dataString); // If the hexadecimal is uppercase
 
-                    System.out.println("Input: " + dataString + "   " + ts());
+                    System.out.println("Input: " + dataString + "   " + Helpers.ts());
                     System.out.println();
 
                     int len = dataString.length();
@@ -75,7 +77,7 @@ public class ClientHandler implements Runnable {
 
                         errCheck = dataString.substring(len-4*byteSize, len-2*byteSize);
 
-                        System.out.println(errorCheck(dataString.substring(4, len-4*byteSize), errCheck)); // Checks the error-check with CRC-ITU
+                        System.out.println(GT06.errorCheck(dataString.substring(4, len-4*byteSize), errCheck)); // Checks the error-check with CRC-ITU
                         System.out.println();
 
                         ph.handleProtocol(protocolNum, dataString);
@@ -140,102 +142,5 @@ public class ClientHandler implements Runnable {
         return this.socket;
     }
 
-    /*
-     * Removes proceeding zeros in a String
-     */
-    public String removeProZeros(String imei) {
-        int i = 0;
-        while(imei.charAt(i) == '0') {
-            i += 1;
-        }
-
-        return imei.substring(i);
-    }
-
-    /*
-     * The GT06-packets always starts with "7878" and ends with "0d0a"
-     * This is used when sending packets to the client
-     */
-    public String addStartEnd(String str) {
-        return "7878" + str + "0d0a";
-    }
-
-    /*
-     * Returns a new array with only the length of the bytes read, and with the same elements
-     */
-    public byte[] byteCutoff(byte[] dataT, int nRead) {
-        byte[] d = new byte[nRead];
-
-        for (int i = 0; i < nRead; i++) {
-            d[i] = dataT[i];
-        }
-        return d;
-    }
-
-    public String toLowerCase(String str) {
-        String res = "";
-
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-
-            if (!Character.isDigit(c)) {
-                char cLower = c;
-                if (Character.isUpperCase(c)) {
-                    cLower = (char) (c ^ 0x20);
-                }
-                res += cLower;
-            }
-            else {
-                res += c;
-            } 
-        }
-        return res;
-    }
-
-    public String removeWhiteSpace(String in) {
-        String out = "";
- 
-        for (int i = 0; i < in.length(); i++) {
-            char ch = in.charAt(i);
- 
-            // Checking whether is white space or not
-            if (!Character.isWhitespace(ch)) {
-                out += ch;
-            }
-        }
-        return out;
-    }
-
-    public String byteToHex(byte[] byteArray) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : byteArray) {
-            sb.append(String.format("%02X ", b));
-        }
-        return sb.toString();
-    }
-
-    public byte[] hexStrToByteArr(String data) {
-        int len = data.length();
-        byte[] bytes = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            bytes[i / 2] = (byte) ((Character.digit(data.charAt(i), 16) << 4)
-                                + Character.digit(data.charAt(i+1), 16));
-        }
-        return bytes;
-    }
-
-    public String crcCalc(String data) {
-        byte[] dataArr = hexStrToByteArr(data);
-        CRC_Table crcObj = new CRC_Table();
-        return crcObj.getCRC(dataArr);
-    }
-
-    public boolean errorCheck(String data, String comp) {
-        String res = crcCalc(data);
-        return res.equalsIgnoreCase(comp);
-    }
     
-    public static String ts() {
-        return "Timestamp: " + new Timestamp(new java.util.Date().getTime());
-    }
 }
