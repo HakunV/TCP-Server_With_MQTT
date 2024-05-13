@@ -26,7 +26,7 @@ public class Sender {
     }
 
     public int connect(ConnectOptions co) {
-        String[] res = Connect.connect(new ConnectOptions());
+        String[] res = Connect.connect(co);
         send(res[0]);
         return Integer.parseInt(res[1]);
     }

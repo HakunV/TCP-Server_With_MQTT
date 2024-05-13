@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.*;
 
 import tcpserver.Backend.CommunicationFlow.ComFlow;
+import tcpserver.Backend.Options.ConnectOptions;
 
 public class BackendClient implements Runnable {
     private Socket client = null;
@@ -48,6 +49,7 @@ public class BackendClient implements Runnable {
 
     public void run() {
         this.keepAliveInterval = connect();
+        System.out.println("keepAliveInterval: " + keepAliveInterval);
         setDownTime();
 
         while (active) {
@@ -61,7 +63,10 @@ public class BackendClient implements Runnable {
     }
 
     public int connect() {
-        int keepAliveTime = s.connect();
+        ConnectOptions co = new ConnectOptions();
+        co.setKeepAlive(30);
+
+        int keepAliveTime = s.connect(co);
 
         while(!r.getConAcc()) {
             synchronized(waiter) {
