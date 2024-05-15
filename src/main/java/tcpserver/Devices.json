@@ -1,14 +1,1 @@
-[
-    {
-        "DeviceID": "ULEukW",
-        "IMEI": "355688700322392"
-    },
-    {
-        "DeviceID": "4IT7Sm",
-        "IMEI": "353994711603560"
-    },
-    {
-        "DeviceID": "0xmzJf",
-        "IMEI": "351969561190977"
-    }
-]
+[{"DeviceID":"4IT7Sm","IMEI":"353994711603560"},{"DeviceID":"U51Bqk","IMEI":"Humidity"},{"DeviceID":"QUA09t","IMEI":"Temperature"},{"DeviceID":"ULEukW","IMEI":"355688700322392"},{"DeviceID":"0xmzJf","IMEI":"351969561190977"}]

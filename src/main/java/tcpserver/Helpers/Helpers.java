@@ -1,8 +1,18 @@
 package tcpserver.Helpers;
 
 import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class Helpers {
     private static int byteSize = 2;
@@ -143,5 +153,131 @@ public class Helpers {
 
         System.out.println("Sent packet");
         System.out.println();
+    }
+
+    public static JsonArray convertFileToJSON (String fileName) {
+        // Read from File to String
+        JsonArray jsonArray = new JsonArray();
+        
+        try {
+            JsonParser parser = new JsonParser();
+            JsonElement jsonElement = parser.parse(new FileReader(fileName));
+
+            if (jsonElement.isJsonArray()) {
+                jsonArray = jsonElement.getAsJsonArray();
+            }
+
+        } catch (FileNotFoundException e) {
+           System.out.println("Could not parse file");
+           e.printStackTrace();
+        }
+        return jsonArray;
+    }
+
+    public static JsonArray stringToJsonArray(String data) {
+        JsonParser parser = new JsonParser();
+
+        JsonArray jsonArray = (JsonArray) parser.parse(data);
+
+        return jsonArray;
+    }
+
+    public static String imeiToDeviceID(String device) {
+        String res = "";
+
+        // For my computer
+        // JsonArray ja = convertFileToJSON("C:/Users/mariu/Development/Bachelor/tcpserver/src/main/java/tcpserver/Devices.json");
+
+        // For the VM
+        JsonArray ja = Helpers.convertFileToJSON("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
+
+        for (JsonElement je : ja) {
+            JsonObject jo = je.getAsJsonObject();
+
+            if (jo.get("IMEI").getAsString().equals(device)) {
+                System.out.println("Yes, it equals");
+                System.out.println();
+                res = jo.get("DeviceID").getAsString();
+                break;
+            }
+        }
+
+        return res;
+    }
+
+    public static void updateDeviceList(JsonArray ja) throws JsonIOException, IOException {
+        for (JsonElement je : ja) {
+            JsonObject jo = je.getAsJsonObject();
+
+            System.out.println("Json Object: " + jo);
+            System.out.println();
+
+            String id = jo.get("DeviceId").getAsString();
+
+            if (!checkDeviceList(id)) {
+                System.out.println("Creating Device");
+                System.out.println();
+
+                String imei = jo.get("Name").getAsString();
+                createDevice(id, imei);
+            }
+        }
+    }
+
+    public static boolean checkDeviceList(String value) {
+        boolean exists = false;
+
+        // VM
+        JsonArray ja = convertFileToJSON("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
+
+        // Local Computer
+        // JsonArray ja = convertFileToJSON("C:/Users/mariu/Development/Bachelor/Developing/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
+
+        for (JsonElement je : ja) {
+            JsonObject jo = je.getAsJsonObject();
+
+            if (jo.get("DeviceID").getAsString().equals(value)) {
+                System.out.println(" Device Exists");
+                System.out.println();
+                exists = true;
+                break;
+            }
+        }
+
+        return exists;
+    }
+
+    public static void createDevice(String id, String imei) throws JsonIOException {
+        // VM
+        JsonArray ja = convertFileToJSON("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
+
+        // Local Computer
+        // JsonArray ja = convertFileToJSON("C:/Users/mariu/Development/Bachelor/Developing/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
+
+        System.out.println("Array Before: " + ja);
+
+        JsonObject jo = new JsonObject();
+
+        jo.addProperty("DeviceID", id);
+        jo.addProperty("IMEI", imei);
+
+        ja.add(jo);
+
+        System.out.println("Array After: " + ja);
+        Gson gson = new Gson();
+        
+        try {
+            // VM
+            FileWriter fw = new FileWriter("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
+
+            // Local Computer
+            // FileWriter fw = new FileWriter("C:/Users/mariu/Development/Bachelor/Developing/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
+
+            gson.toJson(ja, fw);
+            fw.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,14 +1,6 @@
 package tcpserver.Backend.SenderPackets;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import tcpserver.Backend.MQTT_PubPayload;
 import tcpserver.Backend.Options.PublishOptions;
@@ -88,7 +80,7 @@ public class Publish {
     private static String getJSON(String device, float lat, float lon) {
         // String[] wifi_config = wc.configure();
 
-        String mac = imeiToDeviceID(device);
+        String mac = Helpers.imeiToDeviceID(device);
 
         mpp.setName("");
         mpp.setMAC(mac);
@@ -115,50 +107,5 @@ public class Publish {
 
         System.out.println(json);
         return json;
-    }
-
-    private static String imeiToDeviceID(String device) {
-        String res = "";
-
-        // For my computer
-        // JsonArray ja = convertFileToJSON("C:/Users/mariu/Development/Bachelor/tcpserver/src/main/java/tcpserver/Devices.json");
-
-        // For the VM
-        JsonArray ja = convertFileToJSON("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
-
-        System.out.println("Array: " + ja);
-
-        for (JsonElement je : ja) {
-            System.out.println("Element: " + je);
-
-            JsonObject jo = je.getAsJsonObject();
-
-            if (jo.get("IMEI").getAsString().equals(device)) {
-                System.out.println("Yes, it equals");
-                System.out.println();
-                res = jo.get("DeviceID").getAsString();
-                break;
-            }
-        }
-
-        return res;
-    }
-
-    private static JsonArray convertFileToJSON (String fileName){
-        System.out.println("File: " + fileName);
-
-        // Read from File to String
-        JsonArray jsonArray = new JsonArray();
-        
-        try {
-            JsonParser parser = new JsonParser();
-            System.out.println("Parser: " + parser);
-            JsonElement jsonElement = parser.parse(new FileReader(fileName));
-            jsonArray = jsonElement.getAsJsonArray();
-        } catch (FileNotFoundException e) {
-           System.out.println("Could not parse file");
-           e.printStackTrace();
-        }
-        return jsonArray;
     }
 }
