@@ -124,6 +124,8 @@ public class Publish {
         System.out.println("Array: " + ja);
 
         for (JsonElement je : ja) {
+            System.out.println("Element: " + je);
+
             JsonObject jo = je.getAsJsonObject();
 
             if (jo.get("IMEI").getAsString().equals(device)) {
@@ -131,10 +133,6 @@ public class Publish {
                 System.out.println();
                 res = jo.get("DeviceID").getAsString();
                 break;
-            }
-            else {
-                System.out.println("Did not find IMEI");
-                System.out.println();
             }
         }
 
@@ -151,7 +149,6 @@ public class Publish {
             JsonParser parser = new JsonParser();
             System.out.println("Parser: " + parser);
             JsonElement jsonElement = parser.parse(new FileReader(fileName));
-            System.out.println("Element: " + jsonElement);
             jsonArray = jsonElement.getAsJsonArray();
         } catch (FileNotFoundException e) {
            System.out.println("Could not parse file");
