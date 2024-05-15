@@ -1,5 +1,6 @@
 package tcpserver.Backend.SenderPackets;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
@@ -142,6 +143,10 @@ public class Publish {
 
     private static JsonArray convertFileToJSON (String fileName){
         System.out.println("File: " + fileName);
+
+        File file = new File(fileName);
+
+        System.out.println("Path: " + file.getAbsolutePath());
 
         // Read from File to String
         JsonArray jsonArray = new JsonArray();
