@@ -120,7 +120,7 @@ public class Publish {
         String res = "";
 
         // JsonArray ja = convertFileToJSON("C:/Users/mariu/Development/Bachelor/tcpserver/src/main/java/tcpserver/Devices.json");
-        JsonArray ja = convertFileToJSON("./Devices.json");
+        JsonArray ja = convertFileToJSON("../../Devices.json");
 
         System.out.println("Array: " + ja);
 
