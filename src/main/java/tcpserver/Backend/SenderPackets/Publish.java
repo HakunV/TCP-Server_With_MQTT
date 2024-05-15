@@ -120,8 +120,11 @@ public class Publish {
     private static String imeiToDeviceID(String device) {
         String res = "";
 
+        // For my computer
         // JsonArray ja = convertFileToJSON("C:/Users/mariu/Development/Bachelor/tcpserver/src/main/java/tcpserver/Devices.json");
-        JsonArray ja = convertFileToJSON("../../Devices.json");
+
+        // For the VM
+        JsonArray ja = convertFileToJSON("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
 
         System.out.println("Array: " + ja);
 
@@ -143,10 +146,6 @@ public class Publish {
 
     private static JsonArray convertFileToJSON (String fileName){
         System.out.println("File: " + fileName);
-
-        File file = new File(fileName);
-
-        System.out.println("Path: " + file.getAbsolutePath());
 
         // Read from File to String
         JsonArray jsonArray = new JsonArray();
