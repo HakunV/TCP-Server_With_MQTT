@@ -1,5 +1,6 @@
 package tcpserver;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -35,7 +36,13 @@ public class Main {
     private static String imeiToDeviceID(String device) {
         String res = "";
 
-        JsonArray ja = convertFileToJSON("/Users/mariu/Development/Bachelor/tcpserver/src/main/java/tcpserver/Devices.json");
+        JsonArray ja = null;
+        try {
+            ja = convertFileToJSON("/Users/mariu/Development/Bachelor/tcpserver/src/main/java/tcpserver/Devices.json");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         System.out.println("Array: " + ja);
 
@@ -54,8 +61,14 @@ public class Main {
         return res;
     }
 
-    private static JsonArray convertFileToJSON (String fileName){
+    private static JsonArray convertFileToJSON (String fileName) throws IOException{
         System.out.println("File: " + fileName);
+
+        File fr = new File(fileName);
+
+        System.out.println("Absolute: " + fr.getAbsolutePath());
+        System.out.println("Canon: " + fr.getCanonicalPath());
+
 
         // Read from File to String
         JsonArray jsonArray = new JsonArray();
@@ -63,7 +76,7 @@ public class Main {
         try {
             JsonParser parser = new JsonParser();
             System.out.println("Parser: " + parser);
-            JsonElement jsonElement = parser.parse(new FileReader(fileName));
+            JsonElement jsonElement = parser.parse(new FileReader(fr));
             jsonArray = jsonElement.getAsJsonArray();
         } catch (FileNotFoundException e) {
            System.out.println("Could not parse file");
