@@ -66,18 +66,21 @@ public class CommandLink implements Runnable {
         }
         else {
             String[] mes = str.split(",");
-            // String imei = str.substring(0, 15);
-            // String command = str.substring(15, str.length());
 
-            System.out.println(mes[0] + " and " + mes[1]);
+            try {
+                for (int i = 0; i < (mes.length/2); i += 2) {
+                    ClientHandler ch = s.getClient(mes[i]);
 
-            ClientHandler ch = s.getClient(mes[0]);
-            
-            if (ch == null) {
-                System.out.println("No Such Clients");
+                    if (ch == null) {
+                        System.out.println("No Such Clients");
+                    }
+                    else {
+                        ch.sendCommand(mes[i+1]);
+                    }
+                }
             }
-            else {
-                ch.sendCommand(mes[1]);
+            catch (StringIndexOutOfBoundsException e) {
+                System.out.println("Index out of bounds");
             }
         }
     }
