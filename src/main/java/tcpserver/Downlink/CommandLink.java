@@ -68,7 +68,7 @@ public class CommandLink implements Runnable {
             String[] mes = str.split(",");
 
             try {
-                for (int i = 0; i < (mes.length/2); i += 2) {
+                for (int i = 0; i < mes.length; i += 2) {
                     System.out.println("Imei: " + mes[i]);
                     System.out.println("Command: " + mes[i+1]);
                     System.out.println();
