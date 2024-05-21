@@ -10,6 +10,12 @@ import java.lang.Thread;
 import tcpserver.Backend.BackendClient;
 import tcpserver.Downlink.CommandLink;
 
+// W15L: 353994711603560, 4IT7Sm
+// R56L: 355688700322392, ULEukW
+// R58L: 351969561190977, 0xmzJf
+
+
+
 public class Server {
     public int port = 30001;
 
@@ -126,6 +132,8 @@ public class Server {
     public ClientHandler getClient(String imei) {
         ClientHandler res = null;
         
+        System.out.println(this.clients);
+
         for (ClientHandler c : this.clients) {
             if (c.getImei().equals(imei)) {
                 res = c;
