@@ -69,16 +69,16 @@ public class CommandLink implements Runnable {
             // String imei = str.substring(0, 15);
             // String command = str.substring(15, str.length());
 
-            System.out.println(mes);
+            System.out.println(mes[0] + " and " + mes[1]);
 
-            // ClientHandler ch = s.getClient(imei);
+            ClientHandler ch = s.getClient(mes[0]);
             
-            // if (ch == null) {
-            //     System.out.println("No Such Clients");
-            // }
-            // else {
-            //     ch.sendCommand(command);
-            // }
+            if (ch == null) {
+                System.out.println("No Such Clients");
+            }
+            else {
+                ch.sendCommand(mes[1]);
+            }
         }
     }
 
