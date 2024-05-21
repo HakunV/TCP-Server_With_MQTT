@@ -83,8 +83,10 @@ public class CommandLink implements Runnable {
                     }
                 }
             }
-            catch (StringIndexOutOfBoundsException e) {
+            catch (ArrayIndexOutOfBoundsException ae) {
                 System.out.println("Index out of bounds");
+                System.out.println("Try Again");
+                System.out.println();
             }
         }
     }
