@@ -8,7 +8,7 @@ import java.util.*;
 public class ClientDummy {
     public Socket client = null;
     public String ip = "159.65.118.39";
-    public int port = 30001;
+    public int port = 30000;
     public BufferedInputStream bis = null;
     public BufferedOutputStream bos = null;
     public Scanner scan = null;
@@ -41,7 +41,8 @@ public class ClientDummy {
 
             System.out.println("Your input: " + data);
 
-            byte[] b = hexStrToByteArr(data);
+            // byte[] b = hexStrToByteArr(data);
+            byte[] b = data.getBytes();
 
             bos.write(b);
             bos.flush();

@@ -1,8 +1,6 @@
-package tcpserver;
+package tcpserver.Client;
 
 import java.io.IOException;
-
-import tcpserver.Client.ClientDummy;
 
 public class ClientMain {
     public static void main(String[] args) {

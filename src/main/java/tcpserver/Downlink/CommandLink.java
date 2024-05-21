@@ -61,17 +61,22 @@ public class CommandLink implements Runnable {
     }
 
     public void handleData(String str) throws IOException {
-        // IMEI numbers are 15 digits long
-        String imei = str.substring(0, 16);
-        String command = str.substring(16, str.length());
-
-        ClientHandler ch = s.getClient(imei);
-        
-        if (ch == null) {
-            System.out.println("No Such Clients");
+        if (str.length() < 15) {
+            System.out.println("Too Short");
         }
         else {
-            ch.sendCommand(command);
+            // IMEI numbers are 15 digits long
+            String imei = str.substring(0, 16);
+            String command = str.substring(16, str.length());
+
+            ClientHandler ch = s.getClient(imei);
+            
+            if (ch == null) {
+                System.out.println("No Such Clients");
+            }
+            else {
+                ch.sendCommand(command);
+            }
         }
     }
 
