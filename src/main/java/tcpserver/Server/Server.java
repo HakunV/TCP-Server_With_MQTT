@@ -134,6 +134,8 @@ public class Server {
         
         System.out.println(this.clients);
 
+        System.out.println(imei);
+
         for (ClientHandler c : this.clients) {
             System.out.println(c.getImei());
             if (c.getImei().equals(imei)) {
