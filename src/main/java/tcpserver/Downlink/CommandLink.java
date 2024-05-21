@@ -67,7 +67,12 @@ public class CommandLink implements Runnable {
 
         ClientHandler ch = s.getClient(imei);
         
-        ch.sendCommand(command);
+        if (ch == null) {
+            System.out.println("No Such Clients");
+        }
+        else {
+            ch.sendCommand(command);
+        }
     }
 
     public void sendResponse(String str) throws IOException {
