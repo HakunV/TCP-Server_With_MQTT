@@ -17,9 +17,9 @@ public class Main {
 
         scheduler.scheduleAtFixedRate(new Task(), 0, 10, TimeUnit.MINUTES);
 
-        // Server server = new Server();
+        Server server = new Server();
 
-        // server.runServer();
+        server.runServer();
 
         // BackendClient backendClient = new BackendClient();
 

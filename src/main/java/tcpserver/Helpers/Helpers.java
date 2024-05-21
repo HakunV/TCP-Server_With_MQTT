@@ -209,9 +209,6 @@ public class Helpers {
         for (JsonElement je : ja) {
             JsonObject jo = je.getAsJsonObject();
 
-            System.out.println("Json Object: " + jo);
-            System.out.println();
-
             String id = jo.get("DeviceId").getAsString();
 
             if (!checkDeviceList(id)) {
@@ -254,8 +251,6 @@ public class Helpers {
         // Local Computer
         // JsonArray ja = convertFileToJSON("C:/Users/mariu/Development/Bachelor/Developing/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
 
-        System.out.println("Array Before: " + ja);
-
         JsonObject jo = new JsonObject();
 
         jo.addProperty("DeviceID", id);
@@ -263,7 +258,6 @@ public class Helpers {
 
         ja.add(jo);
 
-        System.out.println("Array After: " + ja);
         Gson gson = new Gson();
         
         try {
