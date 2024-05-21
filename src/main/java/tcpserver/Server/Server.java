@@ -131,10 +131,6 @@ public class Server {
 
     public ClientHandler getClient(String imei) {
         ClientHandler res = null;
-        
-        System.out.println(this.clients);
-
-        System.out.println(imei);
 
         for (ClientHandler c : this.clients) {
             System.out.println(c.getImei());

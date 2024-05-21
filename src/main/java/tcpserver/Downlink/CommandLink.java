@@ -69,6 +69,10 @@ public class CommandLink implements Runnable {
 
             try {
                 for (int i = 0; i < (mes.length/2); i += 2) {
+                    System.out.println("Imei: " + mes[i]);
+                    System.out.println("Command: " + mes[i+1]);
+                    System.out.println();
+
                     ClientHandler ch = s.getClient(mes[i]);
 
                     if (ch == null) {
