@@ -61,22 +61,24 @@ public class CommandLink implements Runnable {
     }
 
     public void handleData(String str) throws IOException {
-        if (str.length() < 15) {
+        if (str.length() < 15 || !str.contains(",")) {
             System.out.println("Too Short");
         }
         else {
-            // IMEI numbers are 15 digits long
-            String imei = str.substring(0, 15);
-            String command = str.substring(15, str.length());
+            String[] mes = str.split(",");
+            // String imei = str.substring(0, 15);
+            // String command = str.substring(15, str.length());
 
-            ClientHandler ch = s.getClient(imei);
+            System.out.println(mes);
+
+            // ClientHandler ch = s.getClient(imei);
             
-            if (ch == null) {
-                System.out.println("No Such Clients");
-            }
-            else {
-                ch.sendCommand(command);
-            }
+            // if (ch == null) {
+            //     System.out.println("No Such Clients");
+            // }
+            // else {
+            //     ch.sendCommand(command);
+            // }
         }
     }
 
@@ -116,7 +118,7 @@ class Receiver implements Runnable {
             }
         }
         catch (IOException e) {
-            System.out.println("Failed To Read the Bis MQTT");
+            System.out.println("Failed To Read the Bis CommandLink");
             e.printStackTrace();
         }
     }

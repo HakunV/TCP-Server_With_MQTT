@@ -12,7 +12,6 @@ public class Receiver implements Runnable {
         this.bis = bis;
     }
 
-    @Override
     public void run() {
         byte[] dataT = new byte[512];
         int nRead = 0;
@@ -24,6 +23,7 @@ public class Receiver implements Runnable {
                     byte[] data = byteCutoff(dataT, nRead);
                     dataString = byteToHex(data);
                     dataString = removeWhiteSpace(dataString);
+                    dataString = hexToString(dataString);
 
                     System.out.println("Input: " + dataString);
                     System.out.println();
@@ -66,5 +66,15 @@ public class Receiver implements Runnable {
             sb.append(String.format("%02X ", b));
         }
         return sb.toString();
+    }
+
+    public static String hexToString(String str) {
+        String txt = "";
+        for (int i = 0; i <= str.length()-2; i += 2) {
+            String s = str.substring(i, i + 2);
+            txt = txt + (char) Integer.parseInt(s, 16);
+        }
+
+        return txt;
     }
 }
