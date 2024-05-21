@@ -66,8 +66,8 @@ public class CommandLink implements Runnable {
         }
         else {
             // IMEI numbers are 15 digits long
-            String imei = str.substring(0, 16);
-            String command = str.substring(16, str.length());
+            String imei = str.substring(0, 15);
+            String command = str.substring(15, str.length());
 
             ClientHandler ch = s.getClient(imei);
             
