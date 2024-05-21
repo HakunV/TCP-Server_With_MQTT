@@ -41,7 +41,12 @@ public class ProtocolHandler {
             case "15":
                 System.out.println("Command Response");
                 System.out.println();
-                handleCommandResponse(dataString);
+                String comResponse = handleCommandResponse(dataString);
+                try {
+                    client.commandResponse(comResponse);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "26":
                 System.out.println("Alarm Message");
@@ -256,7 +261,7 @@ public class ProtocolHandler {
         }
     }
 
-    private void handleCommandResponse(String d) {
+    private String handleCommandResponse(String d) {
         String comLen = d.substring(4*byteSize, 5*byteSize);
         int comLenInt = Integer.parseInt(comLen, 16);
         System.out.println("Length of Command: " + comLenInt);
@@ -275,6 +280,8 @@ public class ProtocolHandler {
         System.out.println("Language:");
         System.out.println();
         checkLanguage(language);
+
+        return comContent;
     }
 
     private void checkCommandResponse(String response) {

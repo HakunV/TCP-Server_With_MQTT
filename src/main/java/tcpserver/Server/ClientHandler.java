@@ -19,7 +19,7 @@ public class ClientHandler implements Runnable {
 
     public String isn = "0000";  // Might change to int
 
-    public int byteSize = 2;
+    public int byteSize = Helpers.getByteSize();
 
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
@@ -114,11 +114,18 @@ public class ClientHandler implements Runnable {
 
     public void respondToLogin(String isn) throws IOException {
         cw.respondStandard("01", isn);
-        // cw.sendCommand("3C535042534A2A503A42534A4750532A33503A303E");
     }
 
     public void respondToAlarm(String isn) throws IOException {
         cw.respondStandard("26", isn);
+    }
+
+    public void sendCommand(String command) throws IOException {
+        cw.sendCommand(command);
+    }
+
+    public void commandResponse(String response) throws IOException {
+        server.commandResponse(response);
     }
 
     public void setName(String name) {

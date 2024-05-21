@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.lang.Thread;
 
 import tcpserver.Backend.BackendClient;
+import tcpserver.Downlink.CommandLink;
 
 public class Server {
     public int port = 30001;
@@ -18,6 +19,7 @@ public class Server {
 	public BufferedOutputStream bos = null;
 
     public BackendClient mqttClient = null;
+    public CommandLink cl = null;
 
     private ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
     private HashMap<ClientHandler, Thread> clientThreads = new HashMap<ClientHandler, Thread>();
@@ -36,6 +38,7 @@ public class Server {
         }
 
         mqttClient = new BackendClient();
+        cl = new CommandLink(this); 
     }
 
     /*
@@ -44,6 +47,7 @@ public class Server {
     public void runServer() throws IOException {
         boolean serverActive = true;
         mqttConnect();
+        startCommandLink();
         while(serverActive) {
             try {
                 clientSocket = mss.accept();
@@ -65,8 +69,12 @@ public class Server {
 
     public void mqttConnect() {
         Thread mqttThread = new Thread(mqttClient);
-
         mqttThread.start();
+    }
+
+    public void startCommandLink() {
+        Thread comThread = new Thread(cl);
+        comThread.start();
     }
 
     public void removeClient(ClientHandler client) {
@@ -83,6 +91,10 @@ public class Server {
             System.out.println();
             e.printStackTrace();
         }
+    }
+
+    public void commandResponse(String str) throws IOException {
+        cl.sendResponse(str);
     }
 
     /*
@@ -109,5 +121,18 @@ public class Server {
                 System.out.println();
             }
         }
+    }
+
+    public ClientHandler getClient(String imei) {
+        ClientHandler res = null;
+        
+        for (ClientHandler c : this.clients) {
+            if (c.getImei().equals(imei)) {
+                res = c;
+                break;
+            }
+        }
+
+        return res;
     }
 }
