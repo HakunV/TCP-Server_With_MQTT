@@ -133,7 +133,6 @@ public class Server {
         ClientHandler res = null;
 
         for (ClientHandler c : this.clients) {
-            System.out.println(c.getImei());
             if (c.getImei().equals(imei)) {
                 res = c;
                 break;

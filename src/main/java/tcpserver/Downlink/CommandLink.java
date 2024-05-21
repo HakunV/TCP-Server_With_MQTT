@@ -77,6 +77,7 @@ public class CommandLink implements Runnable {
 
                     if (ch == null) {
                         System.out.println("No Such Clients");
+                        System.out.println();
                     }
                     else {
                         ch.sendCommand(mes[i+1]);
