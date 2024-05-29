@@ -89,7 +89,7 @@ public class ClientHandler implements Runnable {
                         // Test case for 7E
                 else if (dataString.substring(0, 2).equals("7e")) {
                     String messageId = dataString.substring(2, 6);
-                    String phoneNumber = dataString.substring(6, 18);
+                    String phoneNumber = dataString.substring(8, 20);
                     String messageSequence = dataString.substring(18, 22);
                     
                     System.out.println("Message ID: " + messageId);
