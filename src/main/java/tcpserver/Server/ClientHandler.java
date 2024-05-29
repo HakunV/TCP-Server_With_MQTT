@@ -99,8 +99,8 @@ public class ClientHandler implements Runnable {
 
                     if (messageId.equals("0100")) {
                         String hexString = "8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635";
-                        byte[] data = hexStringToByteArray(hexString);
-                        byte checksum = calculateChecksum(data);
+                        byte[] data2 = hexStringToByteArray(hexString);
+                        byte checksum = calculateChecksum(data2);
                         System.out.printf("XOR Checksum: %02X\n", checksum);
                         String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+checksum+"7e";
                         
