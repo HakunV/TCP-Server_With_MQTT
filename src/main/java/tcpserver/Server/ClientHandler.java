@@ -102,13 +102,13 @@ public class ClientHandler implements Runnable {
                         String phoneStr = Helpers.textToHex(phoneNumber);
                         System.out.println("Phone Hexed: " + phoneStr);
                         System.out.println("Phone  Hexed Length: " + phoneStr.length());
-                        String hexString = "81000003" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr;
+                        String hexString = "8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr;
                     
                         byte[] data2 = hexStringToByteArray(hexString);
                         byte checksum = calculateChecksum(data2);
                         System.out.printf("XOR Checksum: %02X\n", checksum);
                         //String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+checksum+"7e";
-                        String response = "7e81000003" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr+checksum+"7e";
+                        String response = "7e8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr+checksum+"7e";
                         
                         bos.write(Helpers.hexStrToByteArr(response));
                         bos.flush();
