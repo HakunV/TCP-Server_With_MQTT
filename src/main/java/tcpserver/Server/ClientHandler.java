@@ -104,7 +104,7 @@ public class ClientHandler implements Runnable {
                         byte checksum = calculateChecksum(data2);
                         System.out.printf("XOR Checksum: %02X\n", checksum);
                         //String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+checksum+"7e";
-                        String response = "7e8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+"000000000000000000000000"+checksum+"7e";
+                        String response = "7e8100000f" + phoneNumber +"1a61"+ messageSequence +"01"+checksum+"7e";
                         
                         bos.write(Helpers.hexStrToByteArr(response));
                         bos.flush();
