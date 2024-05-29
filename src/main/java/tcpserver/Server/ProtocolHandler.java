@@ -49,18 +49,12 @@ public class ProtocolHandler {
         System.out.println();
 
         if (messageId.equals("0100")) {
-            //String hexString = "8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635";
             String phoneStr = Helpers.textToHex(phoneNumber);
-            System.out.println("Phone Hexed: " + phoneStr);
-            System.out.println();
-            System.out.println("Phone  Hexed Length: " + phoneStr.length());
-            System.out.println();
             String hexString = "8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr;
         
             byte[] data2 = Helpers.hexStrToByteArr(hexString);
             String checksum = String.format("%02X", Helpers.calculateChecksum(data2));
             System.out.println("XOR Checksum: " + checksum + "\n");
-            //String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+checksum+"7e";
             String response = "7e8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr+checksum+"7e";
             
             try {
@@ -73,14 +67,14 @@ public class ProtocolHandler {
             // bos.flush();
             System.out.println("Sent registration response: " + response);
         }
-        if (messageId.equals("0102")) {
+        else if (messageId.equals("0102")) {
             String hexString = "80010005" + phoneNumber + "2f82" + messageSequence + "04b2" + "00";
 
             byte[] data2 = Helpers.hexStrToByteArr(hexString);
             String checksum = String.format("%02X", Helpers.calculateChecksum(data2));
             System.out.println("XOR Checksum: " + checksum + "\n");
 
-            String response = "7e80010005" + phoneNumber + "2f82" + messageSequence + "04b2" + "00" + checksum + "7e";
+            String response = "7e80010005" + phoneNumber + "2f82" + messageSequence + "0102" + "00" + checksum + "7e";
 
             try {
                 client.sendMessage(response);
