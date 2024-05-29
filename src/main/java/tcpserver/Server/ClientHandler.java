@@ -99,11 +99,10 @@ public class ClientHandler implements Runnable {
 
                     if (messageId.equals("0100")) {
                         String response = "7E810000050" + phoneNumber + messageSequence + "00D47E";
-                        bos.write(Helpers.hexStringToByteArray(response));
+                        bos.write(Helpers.hexStrToByteArr(response));
                         bos.flush();
                         System.out.println("Sent registration response: " + response);
                     }
-
                 } 
                     else {
                         System.out.println("Wrong start");

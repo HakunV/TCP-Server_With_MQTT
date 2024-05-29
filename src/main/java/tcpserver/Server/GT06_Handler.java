@@ -4,12 +4,12 @@ import tcpserver.Helpers.Helpers;
 
 import java.io.IOException;
 
-public class ProtocolHandler {
+public class GT06_Handler {
     ClientHandler client;
 
     private int byteSize = 2;
 
-    public ProtocolHandler(ClientHandler client) {
+    public GT06_Handler(ClientHandler client) {
         this.client = client;
     }
 
