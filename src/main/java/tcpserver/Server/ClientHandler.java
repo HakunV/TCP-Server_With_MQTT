@@ -86,6 +86,25 @@ public class ClientHandler implements Runnable {
 
                         ph.handleProtocol(protocolNum, dataString);
                     }
+                        // Test case for 7E
+                else if (dataString.substring(0, 2).equals("7e")) {
+                    String messageId = dataString.substring(2, 6);
+                    String phoneNumber = dataString.substring(6, 18);
+                    String messageSequence = dataString.substring(18, 22);
+                    
+                    System.out.println("Message ID: " + messageId);
+                    System.out.println("Phone Number: " + phoneNumber);
+                    System.out.println("Message Sequence: " + messageSequence);
+                    System.out.println();
+
+                    if (messageId.equals("0100")) {
+                        String response = "7E810000050" + phoneNumber + messageSequence + "00D47E";
+                        bos.write(Helpers.hexStringToByteArray(response));
+                        bos.flush();
+                        System.out.println("Sent registration response: " + response);
+                    }
+
+                } 
                     else {
                         System.out.println("Wrong start");
                     }
