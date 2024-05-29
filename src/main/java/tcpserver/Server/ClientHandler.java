@@ -89,11 +89,13 @@ public class ClientHandler implements Runnable {
                         // Test case for 7E
                 else if (dataString.substring(0, 2).equals("7e")) {
                     String messageId = dataString.substring(2, 6);
-                    String phoneNumber = dataString.substring(8, 20);
+                    String msgProps = dataString.substring(6, 10);
+                    String phoneNumber = dataString.substring(10, 22);
                     String messageSequence = dataString.substring(22, 26);
                     
                     System.out.println("Message ID: " + messageId);
                     System.out.println("Phone Number: " + phoneNumber);
+                    System.out.println("Message Props: " + msgProps);
                     System.out.println("Message Sequence: " + messageSequence);
                     System.out.println();
 
@@ -101,7 +103,9 @@ public class ClientHandler implements Runnable {
                         //String hexString = "8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635";
                         String phoneStr = Helpers.textToHex(phoneNumber);
                         System.out.println("Phone Hexed: " + phoneStr);
+                        System.out.println();
                         System.out.println("Phone  Hexed Length: " + phoneStr.length());
+                        System.out.println();
                         String hexString = "8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr;
                     
                         byte[] data2 = hexStringToByteArray(hexString);
