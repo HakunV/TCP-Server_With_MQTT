@@ -100,7 +100,7 @@ public class ClientHandler implements Runnable {
                     if (messageId.equals("0100")) {
                         //String hexString = "8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635";
                         String phoneStr = Helpers.textToHex(phoneNumber);
-                        String hexString = "81000003" + phoneNumber +"1a61"+ messageSequence +"01"+phoneStr;
+                        String hexString = "81000003" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr;
                     
                         byte[] data2 = hexStringToByteArray(hexString);
                         byte checksum = calculateChecksum(data2);
