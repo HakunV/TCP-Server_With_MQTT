@@ -15,9 +15,9 @@ public class ClientHandler implements Runnable {
     private ClientWriter cw;
     private String imei = "";
 
-    private boolean clientActive = true;
-
     public String isn = "0000";  // Might change to int
+
+    private boolean clientActive = true;
 
     public int byteSize = Helpers.getByteSize();
 
@@ -30,15 +30,13 @@ public class ClientHandler implements Runnable {
         int nRead = 0;
         byte[] dataT = new byte[1024];
         String dataString = "";
-        int packetLength = 0;
-        String protocolNum = "";
-        String errCheck = "";
 
         try {
             bis = new BufferedInputStream(socket.getInputStream());
             bos = new BufferedOutputStream(socket.getOutputStream());
 
             this.ph = new ProtocolHandler(this);
+            
             this.cw = new ClientWriter(this, bos);
         } catch (IOException e) {
             System.out.println("Wrong when setting up");
@@ -58,70 +56,7 @@ public class ClientHandler implements Runnable {
                     System.out.println("Input: " + dataString + "   " + Helpers.ts());
                     System.out.println();
 
-                    int len = dataString.length();
-
-                    /*
-                     * For GT06, the packet should always start with 7878 or 7979
-                     */
-
-                    /*
-                    * For JT808 the packet should start with 7E
-                    */
-                    if (dataString.substring(0, 2*byteSize).equals("7878") || dataString.substring(0, 2*byteSize).equals("7979")) {
-                        packetLength = Integer.parseInt(dataString.substring(2*byteSize, 3*byteSize), 16);
-                        System.out.println("Length of the packet: " + packetLength);
-                        System.out.println();
-
-                        protocolNum = dataString.substring(3*byteSize, 4*byteSize);
-
-                        // isn = Integer.parseInt(dataString.substring(len-6*byteSize, len-4*byteSize), 16);   // When isn is of type int
-                        isn = dataString.substring(len-6*byteSize, len-4*byteSize);
-                        System.out.println("Information Serial Number: " + isn);
-                        System.out.println();
-
-                        errCheck = dataString.substring(len-4*byteSize, len-2*byteSize);
-
-                        System.out.println(GT06.errorCheck(dataString.substring(4, len-4*byteSize), errCheck)); // Checks the error-check with CRC-ITU
-                        System.out.println();
-
-                        ph.handleProtocol(protocolNum, dataString);
-                    }
-                        // Test case for 7E
-                else if (dataString.substring(0, 2).equals("7e")) {
-                    String messageId = dataString.substring(2, 6);
-                    String msgProps = dataString.substring(6, 10);
-                    String phoneNumber = dataString.substring(10, 22);
-                    String messageSequence = dataString.substring(22, 26);
-                    
-                    System.out.println("Message ID: " + messageId);
-                    System.out.println("Phone Number: " + phoneNumber);
-                    System.out.println("Message Props: " + msgProps);
-                    System.out.println("Message Sequence: " + messageSequence);
-                    System.out.println();
-
-                    if (messageId.equals("0100")) {
-                        //String hexString = "8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635";
-                        String phoneStr = Helpers.textToHex(phoneNumber);
-                        System.out.println("Phone Hexed: " + phoneStr);
-                        System.out.println();
-                        System.out.println("Phone  Hexed Length: " + phoneStr.length());
-                        System.out.println();
-                        String hexString = "8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr;
-                    
-                        byte[] data2 = hexStringToByteArray(hexString);
-                        String checksum = String.format("%02X", calculateChecksum(data2));
-                        System.out.println("XOR Checksum: " + checksum + "\n");
-                        //String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+checksum+"7e";
-                        String response = "7e8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr+checksum+"7e";
-                        
-                        bos.write(Helpers.hexStrToByteArr(response));
-                        bos.flush();
-                        System.out.println("Sent registration response: " + response);
-                    }
-                } 
-                    else {
-                        System.out.println("Wrong start");
-                    }
+                    ph.handleMessage(dataString);
                 }
             }
         } catch (IOException e) {
@@ -139,39 +74,6 @@ public class ClientHandler implements Runnable {
 
             e.printStackTrace();
         }
-    }
-
-        public static byte[] hexStringToByteArray(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                                 + Character.digit(s.charAt(i+1), 16));
-        }
-        return data;
-    }
-
-    public static byte calculateChecksum(byte[] data) {
-        byte checksum = 0x00;
-        for (int i = 0; i < data.length; i++) {
-            if (data[i] == 0x7d) {
-                if (data[i] == 0x01) {
-                    checksum ^= 0x7d;
-                    i++;
-                }
-                else if (data[i] == 0x02) {
-                    checksum ^= 0x7e;
-                    i++;
-                }
-                else {
-                    checksum ^= data[i];
-                }
-            }
-            else {
-                checksum ^= data[i];
-            }
-        }
-        return checksum;
     }
 
     public void publish(float lat, float lon) {
@@ -196,6 +98,10 @@ public class ClientHandler implements Runnable {
 
     public void commandResponse(String response) throws IOException {
         server.commandResponse(response);
+    }
+
+    public void sendMessage(String mes) throws IOException {
+        Helpers.sendMessage(mes, bos);
     }
 
     public void setName(String name) {
