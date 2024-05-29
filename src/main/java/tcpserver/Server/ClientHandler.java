@@ -98,9 +98,11 @@ public class ClientHandler implements Runnable {
                     System.out.println();
 
                     if (messageId.equals("0100")) {
-                        String msgbody =  messageSequence +"00"+"303730303631393532383635";
-                        String crc = GT06.crcCalc(msgbody);
-                        String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+crc+"7e";
+                        String hexString = "8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635";
+                        byte[] data = hexStringToByteArray(hexString);
+                        byte checksum = calculateChecksum(data);
+                        System.out.printf("XOR Checksum: %02X\n", checksum);
+                        String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+checksum+"7e";
                         
                         bos.write(Helpers.hexStrToByteArr(response));
                         bos.flush();
@@ -127,6 +129,24 @@ public class ClientHandler implements Runnable {
 
             e.printStackTrace();
         }
+    }
+
+        public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                                 + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
+    }
+
+    public static byte calculateChecksum(byte[] data) {
+        byte checksum = 0x00;
+        for (byte b : data) {
+            checksum ^= b;
+        }
+        return checksum;
     }
 
     public void publish(float lat, float lon) {
