@@ -11,7 +11,7 @@ public class ClientHandler implements Runnable {
     public Server server;
     private BufferedInputStream bis;
     private BufferedOutputStream bos;
-    private GT06_Handler ph;
+    private ProtocolHandler ph;
     private ClientWriter cw;
     private String imei = "";
 
@@ -38,7 +38,7 @@ public class ClientHandler implements Runnable {
             bis = new BufferedInputStream(socket.getInputStream());
             bos = new BufferedOutputStream(socket.getOutputStream());
 
-            this.ph = new GT06_Handler(this);
+            this.ph = new ProtocolHandler(this);
             this.cw = new ClientWriter(this, bos);
         } catch (IOException e) {
             System.out.println("Wrong when setting up");
@@ -99,7 +99,7 @@ public class ClientHandler implements Runnable {
 
                     if (messageId.equals("0100")) {
                         String msgbody =  messageSequence +"00"+"303730303631393532383635";
-                        String crc = GT06.crcCalc(response);
+                        String crc = GT06.crcCalc(msgbody);
                         String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+crc+"7e";
                         
                         bos.write(Helpers.hexStrToByteArr(response));
