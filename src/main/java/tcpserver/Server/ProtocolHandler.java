@@ -68,7 +68,7 @@ public class ProtocolHandler {
             System.out.println("Sent registration response: " + response);
         }
         else if (messageId.equals("0102")) {
-            String hexString = "80010005" + phoneNumber + "2f82" + messageSequence + "04b2" + "00";
+            String hexString = "80010005" + phoneNumber + "2f82" + messageSequence + "0102" + "00";
 
             byte[] data2 = Helpers.hexStrToByteArr(hexString);
             String checksum = String.format("%02X", Helpers.calculateChecksum(data2));
