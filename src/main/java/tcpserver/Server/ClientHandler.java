@@ -110,7 +110,7 @@ public class ClientHandler implements Runnable {
                     
                         byte[] data2 = hexStringToByteArray(hexString);
                         String checksum = String.format("%02X", calculateChecksum(data2));
-                        System.out.printf("XOR Checksum: %02X\n", checksum);
+                        System.out.println("XOR Checksum: " + checksum + "\n");
                         //String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+checksum+"7e";
                         String response = "7e8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr+checksum+"7e";
                         
