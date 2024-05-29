@@ -149,8 +149,23 @@ public class ClientHandler implements Runnable {
 
     public static byte calculateChecksum(byte[] data) {
         byte checksum = 0x00;
-        for (byte b : data) {
-            checksum ^= b;
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] == 0x7d) {
+                if (data[i] == 0x01) {
+                    checksum ^= 0x7d;
+                    i++;
+                }
+                else if (data[i] == 0x02) {
+                    checksum ^= 0x7e;
+                    i++;
+                }
+                else {
+                    checksum ^= data[i];
+                }
+            }
+            else {
+                checksum ^= data[i];
+            }
         }
         return checksum;
     }
