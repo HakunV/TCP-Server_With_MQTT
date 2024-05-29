@@ -98,7 +98,10 @@ public class ClientHandler implements Runnable {
                     System.out.println();
 
                     if (messageId.equals("0100")) {
-                        String response = "7E810000050" + phoneNumber + messageSequence + "00D47E";
+                        String msgbody =  messageSequence +"00"+"303730303631393532383635";
+                        String crc = GT06.crcCalc(response);
+                        String response = "7e8100000f" + phoneNumber +"1A61"+ messageSequence +"00"+"303730303631393532383635"+crc+"7e";
+                        
                         bos.write(Helpers.hexStrToByteArr(response));
                         bos.flush();
                         System.out.println("Sent registration response: " + response);
