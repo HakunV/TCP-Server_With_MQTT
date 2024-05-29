@@ -11,7 +11,7 @@ public class ClientHandler implements Runnable {
     public Server server;
     private BufferedInputStream bis;
     private BufferedOutputStream bos;
-    private ProtocolHandler ph;
+    private GT06_Handler ph;
     private ClientWriter cw;
     private String imei = "";
 
@@ -38,7 +38,7 @@ public class ClientHandler implements Runnable {
             bis = new BufferedInputStream(socket.getInputStream());
             bos = new BufferedOutputStream(socket.getOutputStream());
 
-            this.ph = new ProtocolHandler(this);
+            this.ph = new GT06_Handler(this);
             this.cw = new ClientWriter(this, bos);
         } catch (IOException e) {
             System.out.println("Wrong when setting up");
@@ -61,8 +61,12 @@ public class ClientHandler implements Runnable {
                     int len = dataString.length();
 
                     /*
-                     * The packet should always start with 7878
+                     * For GT06, the packet should always start with 7878 or 7979
                      */
+
+                    /*
+                    * For JT808 the packet should start with 7E
+                    */
                     if (dataString.substring(0, 2*byteSize).equals("7878") || dataString.substring(0, 2*byteSize).equals("7979")) {
                         packetLength = Integer.parseInt(dataString.substring(2*byteSize, 3*byteSize), 16);
                         System.out.println("Length of the packet: " + packetLength);

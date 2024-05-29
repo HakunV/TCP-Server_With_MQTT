@@ -15,7 +15,6 @@ import tcpserver.Downlink.CommandLink;
 // R58L: 351969561190977, 0xmzJf
 
 
-
 public class Server {
     public int port = 30001;
 

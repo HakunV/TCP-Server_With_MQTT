@@ -5,15 +5,17 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.*;
 
-public class ClientDummy {
+public class ClientDummy implements Runnable {
     public Socket client = null;
     public String ip = "159.65.118.39";
-    public int port = 30000;
+    public int port = 30001;
     public BufferedInputStream bis = null;
     public BufferedOutputStream bos = null;
     public Scanner scan = null;
 
     public Receiver r = null;
+    
+    public String msg = "";
 
     public ClientDummy() {
         try {
@@ -31,24 +33,53 @@ public class ClientDummy {
         }
     }
 
+    public void sendMessage(String msg) throws IOException {
+        byte[] b = msg.getBytes();
+
+        bos.write(b);
+        bos.flush();
+    }
+
+    public void run() {
+        try {
+            runClient();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     public void runClient() throws IOException {
         boolean active = true;
-
+        sendMessage(this.msg);
         while (active) {
-            System.out.println("Write data");
-
-            String data = scan.nextLine();
-
-            System.out.println("Your input: " + data);
-
-            // byte[] b = hexStrToByteArr(data);
-            byte[] b = data.getBytes();
-
-            bos.write(b);
-            bos.flush();
+            
         }
         bos.close();
     }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    // public void runClient() throws IOException {
+    //     boolean active = true;
+
+    //     while (active) {
+    //         System.out.println("Write data");
+
+    //         String data = scan.nextLine();
+
+    //         System.out.println("Your input: " + data);
+
+    //         // byte[] b = hexStrToByteArr(data);
+    //         byte[] b = data.getBytes();
+
+    //         bos.write(b);
+    //         bos.flush();
+    //     }
+    //     bos.close();
+    // }
 
     private byte[] hexStrToByteArr(String data) {
         int len = data.length();
