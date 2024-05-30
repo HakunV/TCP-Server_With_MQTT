@@ -3,7 +3,12 @@ package tcpserver.Server;
 import tcpserver.Helpers.GT06;
 import tcpserver.Helpers.Helpers;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ProtocolHandler {
     ClientHandler client;
@@ -43,19 +48,24 @@ public class ProtocolHandler {
         String messageSequence = dataString.substring(22, 26);
         
         System.out.println("Message ID: " + messageId);
-        System.out.println("Phone Number: " + phoneNumber);
         System.out.println("Message Props: " + msgProps);
+        System.out.println("Phone Number: " + phoneNumber);
         System.out.println("Message Sequence: " + messageSequence);
         System.out.println();
 
         if (messageId.equals("0100")) {
-            String phoneStr = Helpers.textToHex(phoneNumber);
-            String hexString = "8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr;
+            String imei = getManID(dataString) + phoneNumber.substring(2);
+
+            String auth = Helpers.textToHex(phoneNumber);
+
+            String res = handleReg(auth, imei);
+
+            String hexString = "8100000f" + phoneNumber +"1a61"+ messageSequence +res+auth;
         
             byte[] data2 = Helpers.hexStrToByteArr(hexString);
             String checksum = String.format("%02X", Helpers.calculateChecksum(data2));
             System.out.println("XOR Checksum: " + checksum + "\n");
-            String response = "7e8100000f" + phoneNumber +"1a61"+ messageSequence +"00"+phoneStr+checksum+"7e";
+            String response = "7e8100000f" + phoneNumber +"1a61"+ messageSequence +res+auth+checksum+"7e";
             
             try {
                 client.sendMessage(response);
@@ -63,18 +73,28 @@ public class ProtocolHandler {
                 System.out.println("Could Not Send JT808");
                 e.printStackTrace();
             }
-            // bos.write(Helpers.hexStrToByteArr(response));
-            // bos.flush();
             System.out.println("Sent registration response: " + response);
         }
         else if (messageId.equals("0102")) {
-            String hexString = "80010005" + phoneNumber + "2f82" + messageSequence + "0102" + "00";
+            String auth = dataString.substring(26, 50);
+
+            String res = "";
+
+            if (authRegistered(auth)) {
+                setName(getImeiByAuth(auth));
+                res = "00";
+            }
+            else {
+                res = "03";
+            }
+
+            String hexString = "80010005" + phoneNumber + "2f82" + messageSequence + "0102" + res;
 
             byte[] data2 = Helpers.hexStrToByteArr(hexString);
             String checksum = String.format("%02X", Helpers.calculateChecksum(data2));
             System.out.println("XOR Checksum: " + checksum + "\n");
 
-            String response = "7e80010005" + phoneNumber + "2f82" + messageSequence + "0102" + "00" + checksum + "7e";
+            String response = "7e80010005" + phoneNumber + "2f82" + messageSequence + "0102" + res + checksum + "7e";
 
             try {
                 client.sendMessage(response);
@@ -103,12 +123,98 @@ public class ProtocolHandler {
         }
     }
 
+    public String getManID(String str) {
+        return str.substring(34, 44);
+    }
+
     public float getGPS(String lat) {
         int l = Integer.parseInt(lat, 16);
 
         float lf = (float) (l/Math.pow(10, 6));
 
         return lf;
+    }
+
+    public String handleReg(String auth, String imei) {
+        
+        if (authRegistered(auth)) {
+            return "03";
+        }
+
+        try(FileWriter fw = new FileWriter("jtTrackers.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            out.println(auth + "," + imei);   
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setName(imei);
+        checkDups();
+
+        return "00";
+    }
+
+    public boolean authRegistered(String auth) {
+        BufferedReader reader;
+        boolean result = false;
+
+		try {
+			reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Server\\jtTrackers.txt"));
+			String line = reader.readLine();
+
+			while (line != null) {
+				String[] pair = line.split(",");
+
+                if (auth.equals(pair[0])) {
+                    System.out.println("Auth Exists");
+                    System.out.println();
+
+                    result = true;
+                    break;
+                }
+
+				// read next line
+				line = reader.readLine();
+			}
+
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+        return result;
+    }
+
+    public String getImeiByAuth(String a) {
+        BufferedReader reader;
+        String res = "";
+
+		try {
+			reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Server\\jtTrackers.txt"));
+			String line = reader.readLine();
+
+			while (line != null) {
+				String[] pair = line.split(",");
+
+                if (a.equals(pair[0])) {
+                    System.out.println("Auth Exists");
+                    System.out.println();
+
+                    res = pair[1];
+                    break;
+                }
+
+				// read next line
+				line = reader.readLine();
+			}
+
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+        return res;
     }
 
     private void handleGT06Message(String dataString) {
