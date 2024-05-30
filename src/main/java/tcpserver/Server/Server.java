@@ -67,6 +67,7 @@ public class Server {
 
                 cThread.start();
             } catch (Exception e) {
+                e.printStackTrace();
             }          
         }
         mss.close();

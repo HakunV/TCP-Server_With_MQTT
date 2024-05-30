@@ -12,7 +12,7 @@ public class ClientTests {
         BufferedReader reader;
 
 		try {
-			reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\myfile.txt"));
+			reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\randImeis.txt"));
 			String line = reader.readLine();
 
 			while (line != null) {

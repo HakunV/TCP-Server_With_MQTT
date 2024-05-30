@@ -44,7 +44,6 @@ public class ClientDummy implements Runnable {
         try {
             runClient();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

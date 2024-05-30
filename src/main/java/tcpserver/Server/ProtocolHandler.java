@@ -85,6 +85,30 @@ public class ProtocolHandler {
 
             System.out.println("Sent registration response: " + response);
         }
+        else if (messageId.equals("0200")) {
+            float lat = getGPS(dataString.substring(42, 50));
+
+            System.out.println("Latitude: " + lat);
+            System.out.println();
+
+            float lon = getGPS(dataString.substring(50, 58));
+
+            System.out.println("Longitude: " + lon);
+            System.out.println();
+
+            publish(lat, lon);
+        }
+        else if (messageId.equals("0002")) {
+
+        }
+    }
+
+    public float getGPS(String lat) {
+        int l = Integer.parseInt(lat);
+
+        float lf = (float) (l/Math.pow(10, 6));
+
+        return lf;
     }
 
     private void handleGT06Message(String dataString) {
@@ -112,17 +136,6 @@ public class ProtocolHandler {
         System.out.println();
 
         gh.handleProtocol(protocolNum, dataString);
-    }
-
-    private void handleJT808Login(String dataString) {
-        
-        String imei = dataString.substring(10, 25);
-        String serialNumber = dataString.substring(25, 29);
-        String authenticationCode = dataString.substring(29, 33);
-    
-        System.out.println("IMEI: " + imei);
-        System.out.println("Serial Number: " + serialNumber);
-        System.out.println("Authentication Code: " + authenticationCode);
     }
 
     // Method to determine message protocol
