@@ -130,6 +130,9 @@ public class ProtocolHandler {
     public float getGPS(String lat) {
         int l = Integer.parseInt(lat, 16);
 
+        System.out.println("Test coord: " + l);
+        System.out.println();
+
         float lf = (float) (l/Math.pow(10, 6));
 
         return lf;
@@ -145,7 +148,7 @@ public class ProtocolHandler {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw))
         {
-            out.println(auth + "," + imei);   
+            out.println(auth + "," + imei);
         } catch (IOException e) {
             e.printStackTrace();
         }
