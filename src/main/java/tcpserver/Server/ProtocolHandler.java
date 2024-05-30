@@ -117,6 +117,9 @@ public class ProtocolHandler {
             System.out.println();
 
             publish(lat, lon);
+
+            String time = dataString.substring(70, 82);
+            System.out.println("Date: " + time);
         }
         else if (messageId.equals("0002")) {
 
