@@ -104,7 +104,7 @@ public class ProtocolHandler {
     }
 
     public float getGPS(String lat) {
-        int l = Integer.parseInt(lat);
+        int l = Integer.parseInt(lat, 16);
 
         float lf = (float) (l/Math.pow(10, 6));
 

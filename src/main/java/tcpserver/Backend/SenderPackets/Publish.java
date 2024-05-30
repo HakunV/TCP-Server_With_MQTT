@@ -80,6 +80,9 @@ public class Publish {
     private static String getJSON(String device, float lat, float lon) {
         // String[] wifi_config = wc.configure();
 
+        System.out.println("Device: " + device);
+        System.out.println();
+
         String mac = Helpers.imeiToDeviceID(device);
 
         mpp.setName("");
