@@ -167,8 +167,8 @@ class PrintLoad implements Runnable {
     }
 
     public void run() {
-        System.out.println("Clients Connected: " + s.getClients());
-        System.out.println("Client Threads Active: " + s.getClientThreads());
+        System.out.println("Clients Connected: " + s.getClients().size());
+        System.out.println("Client Threads Active: " + s.getClientThreads().size());
         System.out.println("Total Threads Active: " + Thread.activeCount());
     }
 }
