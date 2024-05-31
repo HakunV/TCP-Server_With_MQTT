@@ -8,8 +8,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import tcpserver.Task;
-
 public class ClientDummy implements Runnable {
     public Socket client = null;
     public String ip = "159.65.118.39";
@@ -39,7 +37,7 @@ public class ClientDummy implements Runnable {
     }
 
     public void sendMessage(String msg) throws IOException {
-        byte[] b = msg.getBytes();
+        byte[] b = hexStrToByteArr(msg);
 
         bos.write(b);
         bos.flush();
@@ -80,6 +78,16 @@ public class ClientDummy implements Runnable {
         this.msg = msg;
     }
 
+    public static byte[] hexStrToByteArr(String data) {
+        int len = data.length();
+        byte[] bytes = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            bytes[i / 2] = (byte) ((Character.digit(data.charAt(i), 16) << 4)
+                                + Character.digit(data.charAt(i+1), 16));
+        }
+        return bytes;
+    }
+
     // public void runClient() throws IOException {
     //     boolean active = true;
 
@@ -113,6 +121,7 @@ class StatusSender implements Runnable {
     public void run() {
         try {
             cd.sendMessage(mes);
+
         } catch (IOException e) {
             System.out.println("Could Not Send Status Message");
             System.out.println();
