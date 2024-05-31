@@ -4,6 +4,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.net.ServerSocket;
 import java.lang.Thread;
 
@@ -13,7 +16,6 @@ import tcpserver.Downlink.CommandLink;
 // W15L: 353994711603560, 4IT7Sm
 // R56L: 355688700322392, ULEukW
 // R58L: 351969561190977, 0xmzJf
-
 
 public class Server {
     public int port = 30001;
@@ -53,6 +55,11 @@ public class Server {
         boolean serverActive = true;
         mqttConnect();
         startCommandLink();
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        scheduler.scheduleAtFixedRate(new PrintLoad(this), 0, 10, TimeUnit.SECONDS);
+
         while(serverActive) {
             try {
                 clientSocket = mss.accept();
@@ -140,5 +147,28 @@ public class Server {
         }
 
         return res;
+    }
+
+    public ArrayList<ClientHandler> getClients() {
+        return this.clients;
+    }
+
+    public HashMap<ClientHandler, Thread> getClientThreads() {
+        return this.clientThreads;
+    }
+}
+
+
+class PrintLoad implements Runnable {
+    private Server s;
+
+    public PrintLoad(Server s) {
+        this.s = s;
+    }
+
+    public void run() {
+        System.out.println("Clients Connected: " + s.getClients());
+        System.out.println("Client Threads Active: " + s.getClientThreads());
+        System.out.println("Total Threads Active: " + Thread.activeCount());
     }
 }

@@ -133,9 +133,6 @@ public class ProtocolHandler {
     public float getGPS(String lat) {
         int l = Integer.parseInt(lat, 16);
 
-        System.out.println("Test coord: " + l);
-        System.out.println();
-
         float lf = (float) (l/Math.pow(10, 6));
 
         return lf;

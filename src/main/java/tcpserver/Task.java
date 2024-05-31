@@ -12,9 +12,7 @@ import java.net.URL;
 public class Task implements Runnable {
     public URL url = new URL("http://www.thingsofinter.net:5001/device/getAllDevicesForUser");
 
-    public Task() throws MalformedURLException {
-        System.out.println("Running");
-    }
+    public Task() throws MalformedURLException {}
 
     public void run() {
         try {

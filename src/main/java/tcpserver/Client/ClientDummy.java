@@ -4,6 +4,11 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import tcpserver.Task;
 
 public class ClientDummy implements Runnable {
     public Socket client = null;
@@ -49,10 +54,24 @@ public class ClientDummy implements Runnable {
     }
 
     public void runClient() throws IOException {
+        BufferedReader reader;
+
         boolean active = true;
         sendMessage(this.msg);
+
+
+        reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\randImeis.txt"));
+		
+        StatusSender ss = new StatusSender(this, reader.readLine());
+
+        reader.close();
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        scheduler.scheduleAtFixedRate(ss, 0, (int) (Math.random() * (20 - 10) + 10), TimeUnit.SECONDS);
+
         while (active) {
-            
+
         }
         bos.close();
     }
@@ -79,14 +98,26 @@ public class ClientDummy implements Runnable {
     //     }
     //     bos.close();
     // }
+}
 
-    private byte[] hexStrToByteArr(String data) {
-        int len = data.length();
-        byte[] bytes = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            bytes[i / 2] = (byte) ((Character.digit(data.charAt(i), 16) << 4)
-                                + Character.digit(data.charAt(i+1), 16));
-        }
-        return bytes;
+
+class StatusSender implements Runnable {
+    public ClientDummy cd;
+    public String mes = "";
+
+    public StatusSender(ClientDummy cd, String mes) {
+        this.cd = cd;
+        this.mes = mes;
     }
+
+    public void run() {
+        try {
+            cd.sendMessage(mes);
+        } catch (IOException e) {
+            System.out.println("Could Not Send Status Message");
+            System.out.println();
+            e.printStackTrace();
+        }
+    }
+    
 }
