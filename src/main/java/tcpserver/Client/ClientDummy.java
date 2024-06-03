@@ -1,9 +1,12 @@
 package tcpserver.Client;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,8 +17,6 @@ public class ClientDummy implements Runnable {
     public int port = 30001;
     public BufferedInputStream bis = null;
     public BufferedOutputStream bos = null;
-    public Scanner scan = null;
-
     public Receiver r = null;
     
     public String msg = "";
@@ -25,7 +26,6 @@ public class ClientDummy implements Runnable {
             client = new Socket(ip, port);
             bis = new BufferedInputStream(client.getInputStream());
             bos = new BufferedOutputStream(client.getOutputStream());
-            scan = new Scanner(System.in);
 
             r = new Receiver(bis);
             new Thread(r).start();
@@ -37,6 +37,9 @@ public class ClientDummy implements Runnable {
     }
 
     public void sendMessage(String msg) throws IOException {
+        System.out.println("Message: " + msg);
+        System.out.println();
+
         byte[] b = hexStrToByteArr(msg);
 
         bos.write(b);
@@ -58,8 +61,9 @@ public class ClientDummy implements Runnable {
         sendMessage(this.msg);
 
 
-        reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Client\\randImeis.txt"));
-		
+        // reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Client\\randImeis.txt"));
+        reader = new BufferedReader(new FileReader("D:\\Development\\Bachelor\\TCP-Server_With-MQTT\\src\\main\\java\\tcpserver\\Client\\status_message.txt"));
+
         StatusSender ss = new StatusSender(this, reader.readLine());
 
         reader.close();
