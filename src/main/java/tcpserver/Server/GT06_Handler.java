@@ -471,7 +471,13 @@ public class GT06_Handler {
     private float checkLat(String latitude) {
         int latInt = Integer.parseInt(latitude, 16);
 
-        float latFloat = ((float) 90 / (float) 162000000)*latInt;
+        float min = latInt/30000;
+
+        // float latFloat = ((float) 90 / (float) 162000000)*latInt;
+
+        int degrees = (int) (min/60.0);
+
+        float latFloat = min - (degrees*60);
 
         System.out.println("    " + latFloat);
         System.out.println();
