@@ -16,6 +16,8 @@ public class ClientTests {
 			reader = new BufferedReader(new FileReader("D:\\Development\\Bachelor\\TCP-Server_With-MQTT\\src\\main\\java\\tcpserver\\Client\\randImeis.txt"));
 			String line = reader.readLine();
 
+			int i = 0;
+
 			while (line != null) {
 				// System.out.println(line);
                 ClientDummy cd = new ClientDummy();
@@ -23,6 +25,10 @@ public class ClientTests {
 
                 Thread t = new Thread(cd);
                 t.start();
+
+				i += 1;
+				System.out.println("Clients Created: " + i);
+				System.out.println();
 
 				// read next line
 				line = reader.readLine();

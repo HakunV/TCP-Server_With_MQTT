@@ -70,7 +70,8 @@ public class ClientDummy implements Runnable {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        scheduler.scheduleAtFixedRate(ss, 0, (int) (Math.random() * (20 - 10) + 10), TimeUnit.SECONDS);
+        // scheduler.scheduleAtFixedRate(ss, 0, (int) (Math.random() * (20 - 10) + 10), TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(ss, 0, 2, TimeUnit.MINUTES);
 
         while (active) {
 
