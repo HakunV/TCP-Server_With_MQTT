@@ -96,6 +96,7 @@ public class Server {
         }
         try {
             client.getSocket().close();
+            clientThreads.remove(client);
             System.out.println("Client Connection Successfully Shut Down");
             System.out.println();
         }

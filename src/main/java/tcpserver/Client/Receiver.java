@@ -23,7 +23,7 @@ public class Receiver implements Runnable {
                     byte[] data = byteCutoff(dataT, nRead);
                     dataString = byteToHex(data);
                     dataString = removeWhiteSpace(dataString);
-                    dataString = hexToString(dataString);
+                    // dataString = hexToString(dataString);
 
                     System.out.println("Input: " + dataString);
                     System.out.println();

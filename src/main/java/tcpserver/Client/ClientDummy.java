@@ -58,7 +58,7 @@ public class ClientDummy implements Runnable {
         sendMessage(this.msg);
 
 
-        reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\randImeis.txt"));
+        reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Client\\randImeis.txt"));
 		
         StatusSender ss = new StatusSender(this, reader.readLine());
 
