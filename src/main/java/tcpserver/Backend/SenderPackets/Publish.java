@@ -85,7 +85,7 @@ public class Publish {
 
         String mac = Helpers.imeiToDeviceID(device);
 
-        mpp.setName("");
+        mpp.setName(device);
         mpp.setMAC(mac);
         mpp.setTechnology("wifi");
         // mpp.setIP(wifi_config[0]);

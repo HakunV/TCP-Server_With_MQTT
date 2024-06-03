@@ -115,11 +115,11 @@ public class GT06_Handler {
         System.out.println("Quality of GPS:");
         checkGPS(gpsQual);
 
-        String latitude = d.substring(11*byteSize, 15*byteSize);
+        String latitude = d.substring(17*byteSize, 21*byteSize);
         System.out.println("Latitude:");
         float latVal = checkLat(latitude);
 
-        String longitude = d.substring(15*byteSize, 19*byteSize);
+        String longitude = d.substring(21*byteSize, 25*byteSize);
         System.out.println("Longitude:");
         float lonVal = checkLong(longitude);
 

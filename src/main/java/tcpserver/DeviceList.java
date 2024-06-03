@@ -9,10 +9,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Task implements Runnable {
+public class DeviceList implements Runnable {
     public URL url = new URL("http://www.thingsofinter.net:5001/device/getAllDevicesForUser");
 
-    public Task() throws MalformedURLException {}
+    public DeviceList() throws MalformedURLException {}
 
     public void run() {
         try {

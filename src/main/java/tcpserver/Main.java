@@ -15,7 +15,7 @@ public class Main {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        scheduler.scheduleAtFixedRate(new Task(), 0, 10, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(new DeviceList(), 0, 10, TimeUnit.MINUTES);
 
         Server server = new Server();
 
