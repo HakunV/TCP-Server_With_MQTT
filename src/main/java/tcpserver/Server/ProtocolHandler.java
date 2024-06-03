@@ -77,6 +77,8 @@ public class ProtocolHandler {
         }
         else if (messageId.equals("0102")) {
             String auth = dataString.substring(26, 50);
+            System.out.println("Authentication Code: " + auth);
+            System.out.println();
 
             String res = "";
 
@@ -85,7 +87,7 @@ public class ProtocolHandler {
                 res = "00";
             }
             else {
-                res = "03";
+                res = "00";
             }
 
             String hexString = "80010005" + phoneNumber + "2f82" + messageSequence + "0102" + res;
