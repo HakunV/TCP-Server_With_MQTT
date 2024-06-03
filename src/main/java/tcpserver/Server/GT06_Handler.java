@@ -468,7 +468,7 @@ public class GT06_Handler {
 
         float longFloat = min - (degrees*60);
 
-        System.out.println("    " + longFloat);
+        System.out.println("    " + degrees + "," + longFloat);
         System.out.println();
 
         return longFloat;
