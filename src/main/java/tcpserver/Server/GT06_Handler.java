@@ -460,15 +460,15 @@ public class GT06_Handler {
     private float checkLong(String longitude) {
         long longL = Long.parseLong(longitude, 16);
 
-        float min = longL/30000;
+        // float min = longL/30000;
 
-        // float longFloat = ((float) 180 / (float) 324000000)*longInt;
+        float longFloat = ((float) 180 / (float) 324000000)*longL;
 
-        int degrees = (int) (min/60.0);
+        // int degrees = (int) (min/60.0);
 
-        float longFloat = min - (degrees*60);
+        // float longFloat = min - (degrees*60);
 
-        System.out.println("    " + degrees + "," + longFloat);
+        System.out.println("    " + longFloat);
         System.out.println();
 
         return longFloat;
@@ -477,15 +477,15 @@ public class GT06_Handler {
     private float checkLat(String latitude) {
         long latL = Long.parseLong(latitude, 16);
 
-        float min = latL/30000;
+        // float min = latL/30000;
 
-        // float latFloat = ((float) 90 / (float) 162000000)*latInt;
+        float latFloat = ((float) 90 / (float) 162000000)*latL;
 
-        int degrees = (int) (min/60.0);
+        // int degrees = (int) (min/60.0);
 
-        float latFloat = min - (degrees*60);
+        // float latFloat = min - (degrees*60);
 
-        System.out.println("    " + degrees + "," +  latFloat);
+        System.out.println("    " + latFloat);
         System.out.println();
 
         return latFloat;
