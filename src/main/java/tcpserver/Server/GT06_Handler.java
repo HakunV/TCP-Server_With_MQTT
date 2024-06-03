@@ -479,7 +479,7 @@ public class GT06_Handler {
 
         float latFloat = min - (degrees*60);
 
-        System.out.println("    " + latFloat);
+        System.out.println("    " + degrees + "," +  latFloat);
         System.out.println();
 
         return latFloat;
