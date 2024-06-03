@@ -102,6 +102,16 @@ public class ComFlow {
         }
         return res;
     }
+
+    public int[] getUsed() {
+        int[] res = new int[flows.size()];
+
+        for (int i = 0; i < flows.size(); i++) {
+            res[i] = flows.get(i).getPacketID();
+        }
+
+        return res;
+    }
 }
 
 class Flow {

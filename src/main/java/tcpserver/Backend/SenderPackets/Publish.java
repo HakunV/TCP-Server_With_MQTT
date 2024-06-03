@@ -1,5 +1,7 @@
 package tcpserver.Backend.SenderPackets;
 
+import java.util.ArrayList;
+
 import com.google.gson.Gson;
 
 import tcpserver.Backend.MQTT_PubPayload;
@@ -12,7 +14,7 @@ public class Publish {
 
     private static String nothingImportant = "6a2b0454-7bcb-46eb-8e77-37005d22d72c";
     
-    public static String[] publish(String device, float lat, float lon, PublishOptions po) {
+    public static String[] publish(String device, float lat, float lon, PublishOptions po, int[] packetsInUse) {
         String message = "";
         String tempMes = "";
 
@@ -48,7 +50,7 @@ public class Publish {
 
         String packetID = "";
         if (Integer.parseInt(qos) > 0) {
-            packetID = MQTT.generatePacketID();
+            packetID = MQTT.generatePacketID(packetsInUse);
             tempMes += String.format("%04X", Integer.parseInt(packetID));
         }
 

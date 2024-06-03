@@ -6,7 +6,7 @@ import tcpserver.Helpers.MQTT;
 
 public class Subscribe {
     
-    public static String[] subscribe(String[] topics, SubscribeOptions so) {
+    public static String[] subscribe(String[] topics, SubscribeOptions so, int[] packetsInUse) {
         String message = "";
         String tempMes = "";
 
@@ -22,7 +22,7 @@ public class Subscribe {
 
         // Variable Header
 
-        String packetID = MQTT.generatePacketID();
+        String packetID = MQTT.generatePacketID(packetsInUse);
         tempMes += String.format("%04X", Integer.parseInt(packetID));
 
 

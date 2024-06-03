@@ -56,11 +56,24 @@ public class MQTT {
     /*
      * Generates random 5 digit packet ID
      */
-    public static String generatePacketID() {
+    public static String generatePacketID(int[] inUse) {
+        boolean accepted = false;
+
         int min = 10000;
         int max = 60000;
 
-        int id = (int) (Math.random()*(max-min+1)+min);
+        int id = 0;
+        while (!accepted) {
+            id = (int) (Math.random()*(max-min+1)+min);
+            accepted = true;
+
+            for (int p : inUse) {
+                if (id == p) {
+                    accepted = false;
+                    break;
+                }
+            }
+        }
         return Integer.toString(id);
     }
 }
