@@ -39,7 +39,7 @@ public class BackendClient implements Runnable {
 
             cf = new ComFlow(s);
 
-            r = new Receiver(cf, bis, this.waiter);
+            r = new Receiver(this, cf, bis, this.waiter);
             new Thread(r).start();
         }
         catch(IOException e) {
@@ -104,5 +104,9 @@ public class BackendClient implements Runnable {
 
     public ComFlow getComFlow() {
         return cf;
+    }
+
+    public Sender getSender() {
+        return s;
     }
 }

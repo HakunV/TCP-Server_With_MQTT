@@ -5,8 +5,10 @@ import tcpserver.Helpers.Helpers;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class Receiver implements Runnable {
+    private BackendClient bc = null;
     private ComFlow cf = null;
     private BufferedInputStream bis = null;
     private MQTT_ProtocolHandler mph = null;
@@ -16,7 +18,8 @@ public class Receiver implements Runnable {
 
     private boolean conAcc = false;
 
-    public Receiver(ComFlow cf, BufferedInputStream bis, Object waiter) {
+    public Receiver(BackendClient bc, ComFlow cf, BufferedInputStream bis, Object waiter) {
+        this.bc = bc;
         this.cf = cf;
         this.bis = bis;
         this.mph = new MQTT_ProtocolHandler(this);
@@ -64,5 +67,13 @@ public class Receiver implements Runnable {
 
     public ComFlow getComFlow() {
         return this.cf;
+    }
+
+    public void retryConnect() throws InterruptedException {
+        System.out.println("Wait 5 Seconds");
+        System.out.println();
+        
+        TimeUnit.SECONDS.sleep(5);
+        bc.getSender().connect();
     }
 }

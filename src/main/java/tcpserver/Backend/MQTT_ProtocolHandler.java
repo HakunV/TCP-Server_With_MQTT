@@ -22,6 +22,13 @@ public class MQTT_ProtocolHandler {
                     r.setConAcc(true);
                     r.wakeUp();
                 }
+                else {
+                    try {
+                        r.retryConnect();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
             case "3":
                 System.out.println("Publish Message Received:");
