@@ -94,8 +94,20 @@ public class Server {
         comThread.start();
     }
 
+    public boolean containsClient(ClientHandler ch) {
+        boolean yes = false;
+        
+        for (ClientHandler c : clients) {
+            if (c.getImei().equals(ch.getImei())) {
+                yes = true;
+                break;
+            }
+        }
+        return yes;
+    }
+
     public void removeClient(ClientHandler client) {
-        if (clients.contains(client)) {
+        if (containsClient(client)) {
             System.out.println("Does Not Contain Client");
             System.out.println();
             clients.remove(client);
