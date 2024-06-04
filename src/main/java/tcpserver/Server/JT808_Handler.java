@@ -41,17 +41,17 @@ public class JT808_Handler {
             case "0102":
                 System.out.println("Authentication Message");
                 System.out.println();
-                handleAuth(dataString, phoneNumber, messageSequence);
+                handleAuth(mesBody, phoneNumber, messageSequence);
                 break;
             case "0200":
                 System.out.println("Location Message");
                 System.out.println();
-                handleLoc(dataString);
+                handleLoc(mesBody);
                 break;
             case "0704":
                 System.out.println("Data Batch Message");
                 System.out.println();
-                handleBatch(dataString);
+                handleBatch(mesBody);
                 break;
             case "0002":
                 System.out.println("Heartbeat Message");
