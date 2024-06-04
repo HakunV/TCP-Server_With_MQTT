@@ -96,6 +96,8 @@ public class Server {
 
     public void removeClient(ClientHandler client) {
         if (clients.contains(client)) {
+            System.out.println("Does Not Contain Client");
+            System.out.println();
             clients.remove(client);
         }
         try {
