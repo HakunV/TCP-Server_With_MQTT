@@ -262,8 +262,13 @@ public class GT06_Handler {
     }
 
     private String handleCommandResponse(String d) {
-        String comLen = d.substring(4*byteSize, 5*byteSize);
-        int comLenInt = Integer.parseInt(comLen, 16);
+        int len = Integer.parseInt(d.substring(2*byteSize, 3*byteSize), 16);
+
+        // String comLen = d.substring(4*byteSize, 5*byteSize);
+        // int comLenInt = Integer.parseInt(comLen, 16);
+
+        int comLenInt = len - 28;
+
         System.out.println("Length of Command: " + comLenInt);
         System.out.println();
 
