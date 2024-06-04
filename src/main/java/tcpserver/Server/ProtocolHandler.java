@@ -84,6 +84,7 @@ public class ProtocolHandler {
 
             if (authRegistered(auth)) {
                 setName(getImeiByAuth(auth));
+                checkDups();
                 res = "00";
             }
             else {
@@ -151,6 +152,10 @@ public class ProtocolHandler {
             PrintWriter out = new PrintWriter(bw))
         {
             out.println(auth + "," + imei);
+
+            out.close();
+            bw.close();
+            fw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
