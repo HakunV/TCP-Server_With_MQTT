@@ -18,7 +18,10 @@ public class JT808_Handler {
         this.ph = ph;
     }
 
-    public void handleProtocol(String dataString) {
+    public void handleProtocol(String ds) {
+        String dataString = ds.replace("7d02", "7e");
+        dataString = dataString.replace("7d01", "7d");
+
         String messageId = dataString.substring(2, 6);
         String msgProps = dataString.substring(6, 10);
         String phoneNumber = dataString.substring(10, 22);
@@ -63,6 +66,17 @@ public class JT808_Handler {
                 break;
         }
     }
+
+    // private String revEscape(String ds) {
+    //     for (int i = 2; i < ds.length()-2; i += 2) {
+    //         if (ds.substring(i, i+2).equals("02") && ds.substring(i-2, i).equals("7d")) {
+    //             StringBuilder 
+    //         }
+    //         else if (ds.substring(i, i+2).equals("01") && ds.substring(i-2, i).equals("7d")) {
+
+    //         }
+    //     }
+    // }
 
     private void handleBatch(String dataString) {
         int nLocItem = Integer.parseInt(dataString.substring(0, 4), 16);
