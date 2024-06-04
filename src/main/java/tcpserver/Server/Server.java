@@ -16,6 +16,9 @@ import tcpserver.Downlink.CommandLink;
 // W15L: 353994711603560, 4IT7Sm
 // R56L: 355688700322392, ULEukW
 // R58L: 351969561190977, 0xmzJf
+// S11: 359510085385131, W1xQND
+// S13: 863014538187053, CnO34B
+// R11: 359510087387234, RfJSdb
 
 public class Server {
     public int port = 30001;

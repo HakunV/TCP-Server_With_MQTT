@@ -12,8 +12,8 @@ public class ClientTests {
         BufferedReader reader;
 
 		try {
-			// reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Client\\randImeis.txt"));
-			reader = new BufferedReader(new FileReader("D:\\Development\\Bachelor\\TCP-Server_With-MQTT\\src\\main\\java\\tcpserver\\Client\\randImeis.txt"));
+			reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Client\\randImeis.txt"));
+			// reader = new BufferedReader(new FileReader("D:\\Development\\Bachelor\\TCP-Server_With-MQTT\\src\\main\\java\\tcpserver\\Client\\randImeis.txt"));
 			String line = reader.readLine();
 
 			int i = 0;
