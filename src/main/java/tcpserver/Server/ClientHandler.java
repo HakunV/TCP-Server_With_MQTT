@@ -107,6 +107,8 @@ public class ClientHandler implements Runnable {
 
     public void setName(String name) {
         this.imei = name;
+        System.out.println("Name Set: " + name);
+        System.out.println();
         // cw.setWindowName(name);
     }
 
