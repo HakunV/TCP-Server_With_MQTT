@@ -126,7 +126,12 @@ public class JT808_Handler {
 
         String res = "";
 
-        if (authRegistered(auth)) {
+        if (ph.client.getImei().equals(getImeiByAuth(auth))) {
+            System.out.println("Already Registered");
+            System.out.println();
+            res = "00";
+        }
+        else if (authRegistered(auth)) {
             ph.setName(getImeiByAuth(auth));
             ph.checkDups();
             res = "00";

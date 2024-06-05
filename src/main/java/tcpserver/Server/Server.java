@@ -70,6 +70,8 @@ public class Server {
 
                 System.out.println("Client connected: " + clientSocket.getInetAddress().getHostAddress());
 
+                clientSocket.setSoTimeout(600*1000);
+
                 ClientHandler client = new ClientHandler(clientSocket, this);
                 clients.add(client);
 
