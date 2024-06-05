@@ -45,7 +45,7 @@ public class ClientHandler implements Runnable {
 
         try {
             while (clientActive) {
-                socket.setSoTimeout(20*1000);
+                socket.setSoTimeout(600*1000);
                 while ((nRead = bis.read(dataT)) != -1) {
                     byte[] data = Helpers.byteCutoff(dataT, nRead); // Makes a new array with the size of nRead instead of 1024
                     dataString = Helpers.byteToHex(data);
