@@ -59,6 +59,7 @@ public class JT808_Handler {
             case "0002":
                 System.out.println("Heartbeat Message");
                 System.out.println();
+                handleBeat(mesBody, phoneNumber, messageSequence);
                 break;
             default:
                 System.out.println("Message ID Not Known");
@@ -77,6 +78,25 @@ public class JT808_Handler {
     //         }
     //     }
     // }
+
+    private void handleBeat(String mesBody, String phoneNumber, String messageSequence) {
+        String res = "00";
+
+        String hexString = "80010005" + phoneNumber + "2f82" + messageSequence + "0102" + res;
+
+        byte[] data2 = Helpers.hexStrToByteArr(hexString);
+        String checksum = String.format("%02X", Helpers.calculateChecksum(data2));
+        System.out.println("XOR Checksum: " + checksum + "\n");
+
+        String response = "7e80010005" + phoneNumber + "2f82" + messageSequence + "0102" + res + checksum + "7e";
+
+        try {
+            ph.sendMessage(response);
+        } catch (IOException e) {
+            System.out.println("Could Not Send JT808");
+            e.printStackTrace();
+        }
+    }
 
     private void handleBatch(String dataString) {
         int nLocItem = Integer.parseInt(dataString.substring(0, 4), 16);
