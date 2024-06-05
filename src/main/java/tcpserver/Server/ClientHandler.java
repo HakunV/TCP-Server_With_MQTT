@@ -5,6 +5,7 @@ import tcpserver.Helpers.GT06;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientHandler implements Runnable {
     private Socket socket;
@@ -59,9 +60,12 @@ public class ClientHandler implements Runnable {
                     ph.handleMessage(dataString);
                 }
             }
-        } catch (IOException e) {
-            System.out.println("Reading from bis is failing");
-
+        } 
+        catch (IOException e) {
+            System.out.println("IO Exception");
+            e.printStackTrace();
+        }
+        finally {
             try {
                 bis.close();
                 bos.close();
@@ -71,8 +75,6 @@ public class ClientHandler implements Runnable {
 
             cw.closeWriter();
             server.removeClient(this);
-
-            e.printStackTrace();
         }
     }
 
