@@ -159,10 +159,10 @@ public class JT808_Handler {
 
 		try {
             // For Local Computer
-			// reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Server\\jtTrackers.txt"));
+			reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Server\\jtTrackers.txt"));
 
             // For VM
-            reader = new BufferedReader(new FileReader("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Server/jtTrackers.txt"));
+            // reader = new BufferedReader(new FileReader("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Server/jtTrackers.txt"));
 
 			String line = reader.readLine();
 
@@ -242,10 +242,10 @@ public class JT808_Handler {
 
 		try {
 			// For Local Computer
-			// reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Server\\jtTrackers.txt"));
+			reader = new BufferedReader(new FileReader("C:\\Users\\mariu\\Development\\Bachelor\\Developing\\TCP-Server_With_MQTT\\src\\main\\java\\tcpserver\\Server\\jtTrackers.txt"));
 
             // For VM
-            reader = new BufferedReader(new FileReader("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Server/jtTrackers.txt"));
+            // reader = new BufferedReader(new FileReader("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Server/jtTrackers.txt"));
 			String line = reader.readLine();
 
 			while (line != null) {
