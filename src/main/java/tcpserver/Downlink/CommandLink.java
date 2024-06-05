@@ -61,11 +61,11 @@ public class CommandLink implements Runnable {
     }
 
     public void handleData(String str) throws IOException {
-        if (str.length() < 15 || !str.contains(",")) {
+        if (str.length() < 15 || !str.contains(";")) {
             System.out.println("Too Short");
         }
         else {
-            String[] mes = str.split(",");
+            String[] mes = str.split(";");
 
             try {
                 for (int i = 0; i < mes.length; i += 2) {
