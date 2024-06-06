@@ -97,14 +97,27 @@ public class Server {
     }
 
     public void removeClient(ClientHandler client) {
-        clients.remove(client);
-        // if (getClientThread(client) != null) {
-        //     getClientThread(client).interrupt();
-        // }
-        clientThreads.remove(client);
-        System.out.println("Client Connection Successfully Shut Down");
-        System.out.println(); 
-        
+        if (clients.contains(client)) {
+            clients.remove(client);
+
+            System.out.println("ClientHandler Removed");
+            System.out.println();
+        }
+        else {
+            System.out.println("Could Not Find ClientHandler");
+            System.out.println();
+        }
+
+        if (clientThreads.containsKey(client)) {
+            clientThreads.remove(client);
+
+            System.out.println("Thread Removed");
+            System.out.println(); 
+        }
+        else {
+            System.out.println("Could Not Find Thread");
+            System.out.println();
+        }
     }
 
     public void commandResponse(String str) throws IOException {

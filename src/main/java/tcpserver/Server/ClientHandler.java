@@ -46,6 +46,9 @@ public class ClientHandler implements Runnable {
 
         try {
             while (clientActive) {
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new IOException();
+                }
                 while ((nRead = bis.read(dataT)) != -1) {
                     byte[] data = Helpers.byteCutoff(dataT, nRead); // Makes a new array with the size of nRead instead of 1024
                     dataString = Helpers.byteToHex(data);
@@ -66,15 +69,16 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         }
         finally {
+            cw.closeWriter();
+            server.removeClient(this);
+
             try {
                 bis.close();
                 bos.close();
+                socket.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-
-            cw.closeWriter();
-            server.removeClient(this);
         }
     }
 
