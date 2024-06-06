@@ -22,9 +22,12 @@ public class ClientHandler implements Runnable {
 
     public int byteSize = Helpers.getByteSize();
 
+    private long shutdownTime = 0;
+
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
+        shutdownTime = resetShutdownTime();
     }
 
     public void run() {
@@ -46,13 +49,15 @@ public class ClientHandler implements Runnable {
 
         try {
             while (clientActive) {
-                // if (Thread.currentThread().isInterrupted()) {
-                //     System.out.println("Interrupted");
-                //     System.out.println();
-                //     throw new IOException();
-                // }
-                while (!Thread.currentThread().isInterrupted()) {
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new IOException();
+                }
+                if (System.currentTimeMillis() >= shutdownTime) {
+                    throw new IOException();
+                }
+                while (bis.available() > 0) {
                     nRead = bis.read(dataT);
+                    resetShutdownTime();
                     if (nRead != -1) {
                         byte[] data = Helpers.byteCutoff(dataT, nRead); // Makes a new array with the size of nRead instead of 1024
                         dataString = Helpers.byteToHex(data);
@@ -70,7 +75,6 @@ public class ClientHandler implements Runnable {
                         break;
                     }
                 }
-                throw new IOException();
             }
         } 
         catch (IOException e) {
@@ -89,6 +93,10 @@ public class ClientHandler implements Runnable {
                 e1.printStackTrace();
             }
         }
+    }
+
+    private long resetShutdownTime() {
+        return System.currentTimeMillis() + 180*1000;
     }
 
     public void publish(float lat, float lon) {

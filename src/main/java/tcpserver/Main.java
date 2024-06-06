@@ -15,7 +15,7 @@ public class Main {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        scheduler.scheduleAtFixedRate(new DeviceList(), 0, 10, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(new DeviceList(), 0, 3, TimeUnit.MINUTES);
 
         Server server = new Server();
 
@@ -28,7 +28,7 @@ public class Main {
         // Thread th = new Thread(backendClient);
 
         // th.start();
-        // backendClient.publish("355688700322392", (float) 30.2324, (float) 13.2390);
+        // backendClient.publish("359510087300096", (float) 30.2324, (float) 2.2390);
         // backendClient.publish("353994711603560", (float) 47.5432, (float) 9.2342);
     }
 }
