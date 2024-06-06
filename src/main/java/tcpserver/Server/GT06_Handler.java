@@ -502,7 +502,7 @@ public class GT06_Handler {
         System.out.println();
 
         int sat = Integer.parseInt(str.substring(1), 16);
-        System.out.println("    Satelittes connected: " + sat);
+        System.out.println("    Satellites connected: " + sat);
         System.out.println();
     }
 
