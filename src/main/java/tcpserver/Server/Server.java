@@ -138,7 +138,7 @@ public class Server {
                 for (int j = 0; j < i; j++) {
                     if (clients.get(j).getImei().equals(imei)) {
                         // removeClient(clients.get(j));
-                        getClientThread(client).interrupt();
+                        getClientThread(clients.get(j)).interrupt();
                         System.out.println("Removed A Client");
                         System.out.println();
                     }
