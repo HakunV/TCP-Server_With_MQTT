@@ -66,6 +66,9 @@ public class ClientHandler implements Runnable {
 
                         ph.handleMessage(dataString);
                     }
+                    else {
+                        break;
+                    }
                 }
                 throw new IOException();
             }

@@ -68,17 +68,6 @@ public class JT808_Handler {
         }
     }
 
-    // private String revEscape(String ds) {
-    //     for (int i = 2; i < ds.length()-2; i += 2) {
-    //         if (ds.substring(i, i+2).equals("02") && ds.substring(i-2, i).equals("7d")) {
-    //             StringBuilder 
-    //         }
-    //         else if (ds.substring(i, i+2).equals("01") && ds.substring(i-2, i).equals("7d")) {
-
-    //         }
-    //     }
-    // }
-
     private void handleBeat(String mesBody, String phoneNumber, String messageSequence) {
         String res = "00";
 
