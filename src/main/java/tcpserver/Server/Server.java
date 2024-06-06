@@ -97,18 +97,14 @@ public class Server {
     }
 
     public void removeClient(ClientHandler client) {
-        try {
-            clients.remove(client);
-            client.getSocket().close();
-            clientThreads.remove(client);
-            System.out.println("Client Connection Successfully Shut Down");
-            System.out.println();
-        }
-        catch (IOException e) {
-            System.out.println("Failed when closing socket");
-            System.out.println();
-            e.printStackTrace();
-        }
+        clients.remove(client);
+        // if (getClientThread(client) != null) {
+        //     getClientThread(client).interrupt();
+        // }
+        clientThreads.remove(client);
+        System.out.println("Client Connection Successfully Shut Down");
+        System.out.println(); 
+        
     }
 
     public void commandResponse(String str) throws IOException {
@@ -128,7 +124,8 @@ public class Server {
                 int i = clients.indexOf(client);
                 for (int j = 0; j < i; j++) {
                     if (clients.get(j).getImei().equals(imei)) {
-                        removeClient(clients.get(j));
+                        // removeClient(clients.get(j));
+                        getClientThread(client).interrupt();
                         System.out.println("Removed A Client");
                         System.out.println();
                     }
@@ -152,6 +149,16 @@ public class Server {
         }
 
         return res;
+    }
+
+    public Thread getClientThread(ClientHandler ch) {
+        Thread t = null;
+
+        if (clientThreads.containsKey(ch)) {
+            t = clientThreads.get(ch);
+        }
+
+        return t;
     }
 
     public ArrayList<ClientHandler> getClients() {

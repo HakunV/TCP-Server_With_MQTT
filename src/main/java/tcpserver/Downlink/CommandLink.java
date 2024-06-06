@@ -28,7 +28,7 @@ public class CommandLink implements Runnable {
         this.s = s;
         try {
             mss = new ServerSocket(port);
-            System.out.println("Server Running");
+            System.out.println("Command Link Running");
         }
         catch (IOException e) {
             System.out.println("Could not start server");
@@ -63,6 +63,8 @@ public class CommandLink implements Runnable {
     public void handleData(String str) throws IOException {
         if (str.length() < 15 || !str.contains(";")) {
             System.out.println("Too Short");
+            System.out.println();
+            sendResponse("Too Short");
         }
         else {
             String[] mes = str.split(";");
@@ -78,6 +80,7 @@ public class CommandLink implements Runnable {
                     if (ch == null) {
                         System.out.println("No Such Clients");
                         System.out.println();
+                        sendResponse("No Such Clients");
                     }
                     else {
                         ch.sendCommand(mes[i+1]);
@@ -88,6 +91,7 @@ public class CommandLink implements Runnable {
                 System.out.println("Index out of bounds");
                 System.out.println("Try Again");
                 System.out.println();
+                sendResponse("Index Out Of Bounds: Try Again");
             }
         }
     }
