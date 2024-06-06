@@ -46,22 +46,28 @@ public class ClientHandler implements Runnable {
 
         try {
             while (clientActive) {
-                if (Thread.currentThread().isInterrupted()) {
-                    throw new IOException();
+                // if (Thread.currentThread().isInterrupted()) {
+                //     System.out.println("Interrupted");
+                //     System.out.println();
+                //     throw new IOException();
+                // }
+                while (!Thread.currentThread().isInterrupted()) {
+                    nRead = bis.read(dataT);
+                    if (nRead != -1) {
+                        byte[] data = Helpers.byteCutoff(dataT, nRead); // Makes a new array with the size of nRead instead of 1024
+                        dataString = Helpers.byteToHex(data);
+
+                        dataString = Helpers.removeWhiteSpace(dataString); // If there are whitespaces between bytes
+
+                        dataString = Helpers.toLowerCase(dataString); // If the hexadecimal is uppercase
+
+                        System.out.println("Input: " + dataString + "   " + Helpers.ts());
+                        System.out.println();
+
+                        ph.handleMessage(dataString);
+                    }
                 }
-                while ((nRead = bis.read(dataT)) != -1) {
-                    byte[] data = Helpers.byteCutoff(dataT, nRead); // Makes a new array with the size of nRead instead of 1024
-                    dataString = Helpers.byteToHex(data);
-
-                    dataString = Helpers.removeWhiteSpace(dataString); // If there are whitespaces between bytes
-
-                    dataString = Helpers.toLowerCase(dataString); // If the hexadecimal is uppercase
-
-                    System.out.println("Input: " + dataString + "   " + Helpers.ts());
-                    System.out.println();
-
-                    ph.handleMessage(dataString);
-                }
+                throw new IOException();
             }
         } 
         catch (IOException e) {
