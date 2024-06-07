@@ -1,5 +1,8 @@
 package tcpserver.Backend.SenderPackets;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
@@ -12,11 +15,25 @@ import tcpserver.Helpers.MQTT;
 public class Publish {
     private static MQTT_PubPayload mpp = new MQTT_PubPayload();
 
-    private static String nothingImportant = "6a2b0454-7bcb-46eb-8e77-37005d22d72c";
+    // private static String nothingImportant = "6a2b0454-7bcb-46eb-8e77-37005d22d72c";
     
     public static String[] publish(String device, float lat, float lon, PublishOptions po, int[] packetsInUse) {
         String message = "";
         String tempMes = "";
+
+        String nothingImportant = "";
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("/home/student/a.txt"));
+
+            nothingImportant = br.readLine();
+
+            br.close();
+        }
+        catch (IOException e) {
+            System.out.println("Could Not Read File");
+            e.printStackTrace();
+        }
 
         // Fixed Header
 
@@ -56,7 +73,7 @@ public class Publish {
 
         // Payload
 
-        String payload = getJSON(device, lat, lon);
+        String payload = getJSON(device, nothingImportant, lat, lon);
         String payloadHex = Helpers.textToHex(payload);
 
         tempMes += payloadHex;
@@ -79,7 +96,7 @@ public class Publish {
      * [4]: Channel
      * [5]: Signal aka RSSI
      */
-    private static String getJSON(String device, float lat, float lon) {
+    private static String getJSON(String device, String a, float lat, float lon) {
         // String[] wifi_config = wc.configure();
 
         System.out.println("Device: " + device);
@@ -105,7 +122,7 @@ public class Publish {
         mpp.setChannel(44);
         mpp.setSeq(5);
         mpp.setData(lat, lon, device);
-        mpp.setAuthToken(nothingImportant);
+        mpp.setAuthToken(a);
 
         Gson gson = new Gson();
         String json = gson.toJson(mpp);
