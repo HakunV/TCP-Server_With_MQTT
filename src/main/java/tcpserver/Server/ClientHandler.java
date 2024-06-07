@@ -27,7 +27,7 @@ public class ClientHandler implements Runnable {
     public ClientHandler(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
-        shutdownTime = resetShutdownTime();
+        resetShutdownTime();
     }
 
     public void run() {
@@ -53,7 +53,7 @@ public class ClientHandler implements Runnable {
                     throw new IOException();
                 }
                 if (System.currentTimeMillis() >= shutdownTime) {
-                    System.out.println("Time Is Up");
+                    System.out.println("Time Is Up For: " + this.imei);
                     System.out.println();
                     throw new IOException();
                 }
@@ -96,10 +96,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public long resetShutdownTime() {
+    public void resetShutdownTime() {
         System.out.println("Timer Reset");
         System.out.println();
-        return System.currentTimeMillis() + 180*1000;
+        this.shutdownTime = System.currentTimeMillis() + 120*1000;
     }
 
     public void publish(float lat, float lon) {
