@@ -71,6 +71,9 @@ public class CommandLink implements Runnable {
         if (!loggedIn) {
             handleLogin(str);
         }
+        else if (str.equals("exit")) {
+            r.setRunning(false);
+        }
         else {
             if (str.length() < 15 || !str.contains(";")) {
                 System.out.println("Too Short");
@@ -104,6 +107,7 @@ public class CommandLink implements Runnable {
                     System.out.println();
                     sendResponse(Helpers.textToHex("Index Out Of Bounds: Try Again"));
                 }
+                r.setTimeUp(300*1000);
             }
         }
     }
@@ -119,6 +123,7 @@ public class CommandLink implements Runnable {
             clientSocket.setSoTimeout(0);
             this.loggedIn = true;
             sendResponse(Helpers.textToHex("Accepted"));
+            r.setTimeUp(300*1000);
         }
         else {
             r.setRunning(false);
@@ -150,9 +155,9 @@ class Receiver {
         String dataString = "";
 
         try {
-            setTimeUp();
+            setTimeUp(15*1000);
             while (running) {
-                if (!cl.loggedIn && System.currentTimeMillis() >= timeUp) {
+                if (System.currentTimeMillis() >= timeUp) {
                     throw new IOException();
                 }
                 while (bis.available() > 0) {
@@ -191,8 +196,8 @@ class Receiver {
         }
     }
 
-    public void setTimeUp() {
-        this.timeUp = System.currentTimeMillis() + 10*1000;
+    public void setTimeUp(long time) {
+        this.timeUp = System.currentTimeMillis() + time;
     }
 
     public void setRunning(boolean b) {
