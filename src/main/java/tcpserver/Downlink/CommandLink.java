@@ -27,7 +27,7 @@ public class CommandLink implements Runnable {
     
     public Receiver r = null;
 
-    private boolean loggedIn = false;
+    public boolean loggedIn = false;
 
     public CommandLink(Server s) {
         this.s = s;
@@ -137,6 +137,8 @@ class Receiver {
 
     private boolean running = true;
 
+    private long timeUp = 0;
+
     public Receiver(CommandLink cl, BufferedInputStream bis) {
         this.cl = cl;
         this.bis = bis;
@@ -148,8 +150,11 @@ class Receiver {
         String dataString = "";
 
         try {
-            cl.clientSocket.setSoTimeout(10*1000); // 10 seconds before shutting connection down
+            setTimeUp();
             while (running) {
+                if (!cl.loggedIn && System.currentTimeMillis() >= timeUp) {
+                    throw new IOException();
+                }
                 while (bis.available() > 0) {
                     nRead = bis.read(dataT);
                     if (nRead != -1) {
@@ -184,6 +189,10 @@ class Receiver {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setTimeUp() {
+        this.timeUp = System.currentTimeMillis() + 10*1000;
     }
 
     public void setRunning(boolean b) {
