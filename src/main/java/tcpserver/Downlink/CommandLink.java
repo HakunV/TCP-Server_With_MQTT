@@ -54,8 +54,6 @@ public class CommandLink implements Runnable {
                 bis = new BufferedInputStream(clientSocket.getInputStream());
                 bos = new BufferedOutputStream(clientSocket.getOutputStream());
 
-                clientSocket.setSoTimeout(10*1000); // 10 seconds before shutting connection down
-
                 r = new Receiver(this, bis);
                 r.runReceiver();
             } catch (Exception e) {
@@ -150,6 +148,7 @@ class Receiver {
         String dataString = "";
 
         try {
+            cl.clientSocket.setSoTimeout(10*1000); // 10 seconds before shutting connection down
             while (running) {
                 while (bis.available() > 0) {
                     nRead = bis.read(dataT);
