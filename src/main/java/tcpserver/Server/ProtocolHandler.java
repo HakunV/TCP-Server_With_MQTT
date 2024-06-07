@@ -24,11 +24,13 @@ public class ProtocolHandler {
             case "GT06":
                 System.out.println("GT06 Message");
                 System.out.println();
+                client.resetShutdownTime();
                 handleGT06Message(dataString);
                 break;
             case "JT808":
                 System.out.println("JT808 Message");
                 System.out.println();
+                client.resetShutdownTime();
                 jh.handleProtocol(dataString);
                 break;
             default:
@@ -70,7 +72,6 @@ public class ProtocolHandler {
         if (dataString.startsWith("7878")) {
             return "GT06";
         }
-
         else if (dataString.startsWith("7979")) {
             return "GT06";
         }

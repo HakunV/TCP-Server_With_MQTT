@@ -59,7 +59,6 @@ public class ClientHandler implements Runnable {
                 }
                 while (bis.available() > 0) {
                     nRead = bis.read(dataT);
-                    resetShutdownTime();
                     if (nRead != -1) {
                         byte[] data = Helpers.byteCutoff(dataT, nRead); // Makes a new array with the size of nRead instead of 1024
                         dataString = Helpers.byteToHex(data);
@@ -97,7 +96,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private long resetShutdownTime() {
+    public long resetShutdownTime() {
         return System.currentTimeMillis() + 180*1000;
     }
 
