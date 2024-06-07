@@ -97,6 +97,8 @@ public class ClientHandler implements Runnable {
     }
 
     public long resetShutdownTime() {
+        System.out.println("Timer Reset");
+        System.out.println();
         return System.currentTimeMillis() + 180*1000;
     }
 
