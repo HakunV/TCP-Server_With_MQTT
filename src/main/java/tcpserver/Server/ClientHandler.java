@@ -53,6 +53,8 @@ public class ClientHandler implements Runnable {
                     throw new IOException();
                 }
                 if (System.currentTimeMillis() >= shutdownTime) {
+                    System.out.println("Time Is Up");
+                    System.out.println();
                     throw new IOException();
                 }
                 while (bis.available() > 0) {
