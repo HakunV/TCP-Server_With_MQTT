@@ -23,11 +23,7 @@ public class MQTT_ProtocolHandler {
                     r.wakeUp();
                 }
                 else {
-                    try {
-                        r.retryConnect();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    r.setRetryMQTT(true);
                 }
                 break;
             case "3":

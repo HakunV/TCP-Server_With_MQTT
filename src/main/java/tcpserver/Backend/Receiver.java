@@ -17,6 +17,7 @@ public class Receiver implements Runnable {
     private boolean running = true;
 
     private boolean conAcc = false;
+    private boolean retryMQTT = false;
 
     public Receiver(BackendClient bc, ComFlow cf, BufferedInputStream bis, Object waiter) {
         this.bc = bc;
@@ -35,6 +36,16 @@ public class Receiver implements Runnable {
             while (running) {
                 if (Thread.currentThread().isInterrupted()) {
                     throw new IOException();
+                }
+                if (retryMQTT) {
+                    try {
+                        retryConnect();
+                    }
+                    catch (InterruptedException e) {
+                        System.out.println("Could Not Reconnect");
+                        System.out.println();
+                        e.printStackTrace();
+                    }
                 }
                 while (bis.available() > 0) {
                     nRead = bis.read(dataT);
@@ -77,6 +88,10 @@ public class Receiver implements Runnable {
         synchronized(waiter) {
             waiter.notify();
         }
+    }
+
+    public void setRetryMQTT(boolean b) {
+        retryMQTT = b;
     }
 
     public ComFlow getComFlow() {
