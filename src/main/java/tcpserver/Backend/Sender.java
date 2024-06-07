@@ -80,7 +80,20 @@ public class Sender {
         }
         catch (IOException e) {
             System.out.println("Could Not Send Message");
+            System.out.println();
             e.printStackTrace();
+            
+            Thread rt = bc.getReceiverThread();
+            rt.interrupt();
+
+            try {
+                rt.join();
+            }
+            catch (InterruptedException ie) {
+                System.out.println("Could Not Wait For Thread");
+                System.out.println();
+                ie.printStackTrace();
+            }
         }
     }
 }

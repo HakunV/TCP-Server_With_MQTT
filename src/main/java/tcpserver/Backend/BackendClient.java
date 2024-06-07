@@ -18,6 +18,7 @@ public class BackendClient implements Runnable {
     private BufferedOutputStream bos = null;
 
     private Receiver r = null;
+    private Thread tr = null;
     private Sender s = null;
 
     private ComFlow cf = null;
@@ -26,8 +27,14 @@ public class BackendClient implements Runnable {
     private int keepAliveInterval = 120;
     private long keepAliveLimit = 0;
 
+    private boolean retry = false;
+
     public BackendClient() {
         this.waiter = new Object();
+        connectTCP();
+    }
+
+    public void connectTCP() {
         try {
             client = new Socket(ip, port);
             System.out.println("Connected to DTU");
@@ -40,7 +47,8 @@ public class BackendClient implements Runnable {
             cf = new ComFlow(s);
 
             r = new Receiver(this, cf, bis, this.waiter);
-            new Thread(r).start();
+            tr = new Thread(r);
+            tr.start();
         }
         catch(IOException e) {
             System.out.println("Could not connect to DTU");
@@ -54,10 +62,13 @@ public class BackendClient implements Runnable {
         System.out.println();
         setDownTime();
 
-        // publish("355688700322392", (float) 55.43223, (float) 13.12313);
-        // subscribe();
         while (active) {
-            
+            if (retry) {
+                connectTCP();
+                this.keepAliveInterval = connect();
+                setDownTime();
+                retry = false;
+            }
 
             if (System.currentTimeMillis() >= keepAliveLimit) {
                 s.ping();
@@ -108,5 +119,17 @@ public class BackendClient implements Runnable {
 
     public Sender getSender() {
         return s;
+    }
+
+    public Receiver getReceiver() {
+        return r;
+    }
+
+    public Thread getReceiverThread() {
+        return tr;
+    }
+
+    public void setRetry(boolean b) {
+        this.retry = b;
     }
 }

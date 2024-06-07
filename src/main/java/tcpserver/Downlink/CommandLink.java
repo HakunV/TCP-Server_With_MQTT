@@ -186,6 +186,7 @@ class Receiver {
         }
         finally {
             try {
+                cl.sendResponse(Helpers.textToHex("exit"));
                 bis.close();
                 cl.bos.close();
                 cl.clientSocket.close();

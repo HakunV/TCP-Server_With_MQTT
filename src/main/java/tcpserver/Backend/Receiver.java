@@ -33,23 +33,37 @@ public class Receiver implements Runnable {
 
         try {
             while (running) {
-                while ((nRead = bis.read(dataT)) != -1) {
-                    byte[] data = Helpers.byteCutoff(dataT, nRead);
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new IOException();
+                }
+                while (bis.available() > 0) {
+                    nRead = bis.read(dataT);
 
-                    dataString = Helpers.byteToHex(data);
-                    dataString = Helpers.removeWhiteSpace(dataString);
-                    dataString = Helpers.toLowerCase(dataString);
+                    if (nRead != -1) {
+                        byte[] data = Helpers.byteCutoff(dataT, nRead);
 
-                    System.out.println("Input: " + dataString);
-                    System.out.println();
+                        dataString = Helpers.byteToHex(data);
+                        dataString = Helpers.removeWhiteSpace(dataString);
+                        dataString = Helpers.toLowerCase(dataString);
 
-                    mph.handleMessage(dataString);
+                        System.out.println("Input: " + dataString);
+                        System.out.println();
+
+                        mph.handleMessage(dataString);
+                    }
+                    else {
+                        break;
+                    }
                 }
             }
         }
         catch (IOException e) {
             System.out.println("Failed To Read the Bis MQTT");
+            System.out.println();
             e.printStackTrace();
+        }
+        finally {
+            bc.setRetry(true);
         }
     }
 
@@ -72,7 +86,7 @@ public class Receiver implements Runnable {
     public void retryConnect() throws InterruptedException {
         System.out.println("Wait 5 Seconds");
         System.out.println();
-        
+
         TimeUnit.SECONDS.sleep(5);
         bc.getSender().connect();
     }
