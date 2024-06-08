@@ -14,8 +14,6 @@ import tcpserver.Helpers.MQTT;
 
 public class Publish {
     private static MQTT_PubPayload mpp = new MQTT_PubPayload();
-
-    // private static String nothingImportant = "6a2b0454-7bcb-46eb-8e77-37005d22d72c";
     
     public static String[] publish(String device, float lat, float lon, PublishOptions po, int[] packetsInUse) {
         String message = "";
