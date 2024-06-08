@@ -12,13 +12,14 @@ public class Receiver implements Runnable {
     private ComFlow cf = null;
     private BufferedInputStream bis = null;
     private MQTT_ProtocolHandler mph = null;
-    public Object waiter = null;
+    public Object waiter = null; // Waiter object for synchronization
 
     private boolean running = true;
 
-    private boolean conAcc = false;
-    private boolean retryMQTT = false;
+    private boolean conAcc = false; // Flag indicating if connection is accepted
+    private boolean retryMQTT = false; // Flag indicating if MQTT connection needs to be retried
 
+    // Constructor to initialize Receiver
     public Receiver(BackendClient bc, ComFlow cf, BufferedInputStream bis, Object waiter) {
         this.bc = bc;
         this.cf = cf;
@@ -27,6 +28,7 @@ public class Receiver implements Runnable {
         this.waiter = waiter;
     }
 
+    // Run method to start the receiver
     public void run() {
         byte[] dataT = new byte[512];
         int nRead = 0;
@@ -39,7 +41,7 @@ public class Receiver implements Runnable {
                 }
                 if (retryMQTT) {
                     try {
-                        retryConnect();
+                        retryConnect(); // Send another connect packet
                     }
                     catch (InterruptedException e) {
                         System.out.println("Could Not Reconnect");
@@ -47,7 +49,7 @@ public class Receiver implements Runnable {
                         e.printStackTrace();
                     }
                 }
-                while (bis.available() > 0) {
+                while (bis.available() > 0) { // Read while data is available
                     nRead = bis.read(dataT);
 
                     if (nRead != -1) {
@@ -60,7 +62,7 @@ public class Receiver implements Runnable {
                         System.out.println("Input: " + dataString);
                         System.out.println();
 
-                        mph.handleMessage(dataString);
+                        mph.handleMessage(dataString); // Handle received message with MQTT protocol handler
                     }
                     else {
                         break;
@@ -74,35 +76,43 @@ public class Receiver implements Runnable {
             e.printStackTrace();
         }
         finally {
-            bc.setRetry(true);
+            bc.setRetry(true); // Create new TCP connection
         }
     }
 
+    // Method to set the connection accepted flag
     public void setConAcc(boolean b) {
         this.conAcc = b;
     }
 
-    public boolean getConAcc() {return this.conAcc;}
+    // Method to get the connection accepted flag
+    public boolean getConAcc() {
+        return this.conAcc;
+    }
 
+    // Method to wake up the receiver
     public void wakeUp() {
         synchronized(waiter) {
-            waiter.notify();
+            waiter.notify(); // Notify the waiter object to proceed with connection
         }
     }
 
+    // Method to set the retry MQTT flag
     public void setRetryMQTT(boolean b) {
         retryMQTT = b;
     }
 
+    // Method to get the communication flow
     public ComFlow getComFlow() {
         return this.cf;
     }
 
+    // Method to retry MQTT connection
     public void retryConnect() throws InterruptedException {
         System.out.println("Wait 5 Seconds");
         System.out.println();
 
-        TimeUnit.SECONDS.sleep(5);
-        bc.getSender().connect();
+        TimeUnit.SECONDS.sleep(5); // Wait for 5 seconds
+        bc.getSender().connect(); // Reconnect to the server
     }
 }

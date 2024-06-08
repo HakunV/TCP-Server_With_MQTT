@@ -9,12 +9,18 @@ public class GT06 {
         return "7878" + str + "0d0a";
     }
 
+    /*
+     * Calculate checksum by using CRC-ITU
+     */
     public static String crcCalc(String data) {
         byte[] dataArr = Helpers.hexStrToByteArr(data);
         CRC_Table crcObj = new CRC_Table();
         return crcObj.getCRC(dataArr);
     }
 
+    /*
+     * Checks if unputted checksum is correct
+     */
     public static boolean errorCheck(String data, String comp) {
         String res = crcCalc(data);
         return res.equalsIgnoreCase(comp);
@@ -57,6 +63,9 @@ class CRC_Table {
         0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78
     };
 
+    /*
+     * Calulate checksum using the CRC-ITU method
+     */
     public String getCRC(byte[] data) {
         int crc = 0xffff;
         for (byte b : data) {

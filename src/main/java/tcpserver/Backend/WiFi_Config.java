@@ -11,27 +11,29 @@ public class WiFi_Config {
 
     }
 
+    // Method to configure WiFi and retrieve information
     public String[] configure() {
         // getPublicIPAddress();
-        String[] gw = getGateway();
-        String[] wifi = getWiFiInfo();
+        String[] gw = getGateway(); // Get gateway information
+        String[] wifi = getWiFiInfo(); // Get WiFi information
 
-        String[] res = new String[gw.length + wifi.length];
+        String[] res = new String[gw.length + wifi.length]; // Combine gateway and WiFi information into one array
 
         int j = 0;
         for (int i = 0; i < gw.length; i++) {
-            res[i] = gw[i];
+            res[i] = gw[i]; // Add gateway information to result array
             j++;
         }
         for (int i = 0; i < wifi.length; i++) {
-            res[j] = wifi[i];
+            res[j] = wifi[i]; // Add WiFi information to result array
             j++;
         }
-        return res;
+        return res; // Return combined information
     }
 
+    // Method to retrieve WiFi information
     private String[] getWiFiInfo() {
-        String[] elems = new String[4];
+        String[] elems = new String[4]; // Array to store WiFi information
 
         try {
             // For Windows
@@ -102,7 +104,7 @@ public class WiFi_Config {
             System.out.println("Failed When Getting WiFi Stuff");
             e.printStackTrace();
         }
-        return elems;
+        return elems; // Return WiFi information
     }
 
     // private String getPublicIPAddress() {
@@ -132,12 +134,13 @@ public class WiFi_Config {
     //     return host;
     // }
 
+    // Method to retrieve gateway information
     private String[] getGateway() {
-        boolean correctAdapter = false;
-        String[] elems = new String[2];
+        boolean correctAdapter = false; // Flag to indicate correct network adapter
+        String[] elems = new String[2]; // Array to store gateway information
 
         try {
-            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "ipconfig");
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "ipconfig"); // Command to retrieve network information
             pb.redirectErrorStream(true);
             
             BufferedReader br = new BufferedReader(new InputStreamReader(pb.start().getInputStream()));
@@ -147,16 +150,16 @@ public class WiFi_Config {
                 // System.out.println();
 
                 if (line.contains("Wi-Fi")) {
-                    correctAdapter = true;
+                    correctAdapter = true; // Set flag to true if Wi-Fi adapter is found
                 }
 
-                if (correctAdapter && line.contains("IPv4 Address")) {
+                if (correctAdapter && line.contains("IPv4 Address")) { // Fetch IPv4 address
                     String ipv4 = line.split(": ")[1];
                     System.out.println("IP-address: " + ipv4);
                     System.out.println();
                     elems[0] = ipv4;
                 }
-                else if (correctAdapter && line.contains("Default Gateway")) {
+                else if (correctAdapter && line.contains("Default Gateway")) { // Fetch address of gateway
                     String gateway = line.split(": ")[1];
                     System.out.println("Gateway: " + gateway);
                     System.out.println();

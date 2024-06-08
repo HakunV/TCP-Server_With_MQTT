@@ -45,6 +45,9 @@ public class Helpers {
         return userHex;
     }
 
+    /*
+     * Converts hex string to ASCII string
+     */
     public static String hexToString(String str) {
         String txt = "";
         for (int i = 0; i <= str.length()-2; i += 2) {
@@ -155,6 +158,9 @@ public class Helpers {
         System.out.println();
     }
 
+    /*
+     * Read JSON from file
+     */
     public static JsonArray convertFileToJSON (String fileName) {
         // Read from File to String
         JsonArray jsonArray = new JsonArray();
@@ -174,6 +180,9 @@ public class Helpers {
         return jsonArray;
     }
 
+    /*
+     * Convert JSON string to JSON array
+     */
     public static JsonArray stringToJsonArray(String data) {
         JsonParser parser = new JsonParser();
 
@@ -182,6 +191,9 @@ public class Helpers {
         return jsonArray;
     }
 
+    /*
+     * Finds Device ID belonging to inputted IMEI number
+     */
     public static String imeiToDeviceID(String device) {
         String res = "";
 
@@ -205,6 +217,9 @@ public class Helpers {
         return res;
     }
 
+    /*
+     * Input is JSON array of devices. Local file is updated with new devices
+     */
     public static void updateDeviceList(JsonArray ja) throws JsonIOException, IOException {
         for (JsonElement je : ja) {
             JsonObject jo = je.getAsJsonObject();
@@ -221,6 +236,9 @@ public class Helpers {
         }
     }
 
+    /*
+     * Checks if device exists in local file
+     */
     public static boolean checkDeviceList(String value) {
         boolean exists = false;
 
@@ -244,6 +262,9 @@ public class Helpers {
         return exists;
     }
 
+    /*
+     * Add device to local file
+     */
     public static void createDevice(String id, String imei) throws JsonIOException {
         // VM
         JsonArray ja = convertFileToJSON("/home/student/TCP-Server_With_MQTT/src/main/java/tcpserver/Devices.json");
@@ -275,6 +296,9 @@ public class Helpers {
         }
     }
 
+    /*
+     * Calculate JT808 checksum by XOR'ing bytes
+     */
     public static byte calculateChecksum(byte[] data) {
         byte checksum = 0x00;
         for (int i = 0; i < data.length; i++) {
