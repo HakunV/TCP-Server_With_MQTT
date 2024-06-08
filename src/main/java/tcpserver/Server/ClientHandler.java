@@ -52,11 +52,11 @@ public class ClientHandler implements Runnable {
                 if (Thread.currentThread().isInterrupted()) {
                     throw new IOException();
                 }
-                if (System.currentTimeMillis() >= shutdownTime) {
-                    System.out.println("Time Is Up For: " + this.imei);
-                    System.out.println();
-                    throw new IOException();
-                }
+                // if (System.currentTimeMillis() >= shutdownTime) {
+                //     System.out.println("Time Is Up For: " + this.imei);
+                //     System.out.println();
+                //     throw new IOException();
+                // }
                 while (bis.available() > 0) {
                     nRead = bis.read(dataT);
                     if (nRead != -1) {
