@@ -6,6 +6,10 @@ import tcpserver.Helpers.MQTT;
 public class Pubacks {
     private static int byteSize = Helpers.getByteSize();
 
+    /*
+     * Packet Types of Publish Acknowledgements
+     * Puback = 4, Pubrec = 5, Pubrel = 6, Pubcomp = 7
+     */
     public static int pubacks(String str) {
         int pointer = 1*byteSize;
 

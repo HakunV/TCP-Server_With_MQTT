@@ -5,6 +5,8 @@ public class Disconnect {
     public static String disconnect() {
         String message = "";
 
+        // Fixed Header
+
         String packetType = String.format("%01X", 14);
         message += packetType;
 

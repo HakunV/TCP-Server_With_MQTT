@@ -21,6 +21,7 @@ public class Publish {
         String nothingImportant = "";
 
         try {
+            // Read Authentication Code From Local File
             BufferedReader br = new BufferedReader(new FileReader("/home/student/a.txt"));
 
             nothingImportant = br.readLine();
@@ -101,8 +102,8 @@ public class Publish {
 
         String mac = Helpers.imeiToDeviceID(device);
 
-        mpp.setName(device);
-        mpp.setMAC(mac);
+        mpp.setName(device); // IMEI number
+        mpp.setMAC(mac); // Device ID
         mpp.setTechnology("wifi");
         // mpp.setIP(wifi_config[0]);
         mpp.setIP("10.209.216.197");
@@ -121,6 +122,7 @@ public class Publish {
         mpp.setData(lat, lon, device);
         mpp.setAuthToken(a);
 
+        // Serialize to JSON String
         Gson gson = new Gson();
         String json = gson.toJson(mpp);
 

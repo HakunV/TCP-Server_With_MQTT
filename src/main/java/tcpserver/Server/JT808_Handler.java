@@ -68,6 +68,9 @@ public class JT808_Handler {
         }
     }
 
+    /*
+     * Terminal Heartbeat Packet
+     */
     private void handleBeat(String mesBody, String phoneNumber, String messageSequence) {
         String res = "00";
 
@@ -87,6 +90,9 @@ public class JT808_Handler {
         }
     }
 
+    /*
+     * Terminal Batch Dump Packet
+     */
     private void handleBatch(String dataString) {
         int nLocItem = Integer.parseInt(dataString.substring(0, 4), 16);
         int type = Integer.parseInt(dataString.substring(4, 6), 16);
@@ -103,6 +109,9 @@ public class JT808_Handler {
         }
     }
 
+    /*
+     * Terminal Location Packet
+     */
     private void handleLoc(String dataString) {
         float lat = getGPS(dataString.substring(16, 24));
 
@@ -128,6 +137,9 @@ public class JT808_Handler {
         return lf;
     }
 
+    /*
+     * Terminal Authentication Packet
+     */
     private void handleAuth(String dataString, String phoneNumber, String messageSequence) {
         String auth = dataString;
         System.out.println("Authentication Code: " + auth);
@@ -167,6 +179,9 @@ public class JT808_Handler {
         System.out.println("Sent registration response: " + response);
     }
 
+    /*
+     * Get IMEI of tracker from authentication code
+     */
     public String getImeiByAuth(String a) {
         BufferedReader reader;
         String res = "";
@@ -203,6 +218,9 @@ public class JT808_Handler {
         return res;
     }
 
+    /*
+     * Terminal Register Packet
+     */
     private void handleReg(String dataString, String phoneNumber, String messageSequence) {
         String imei = Helpers.hexToString(getManID(dataString)) + phoneNumber.substring(2);
 
@@ -226,6 +244,9 @@ public class JT808_Handler {
         System.out.println("Sent registration response: " + response);
     }
 
+    /*
+     * Append tracker to file "jtTrackers.txt"
+     */
     public String register(String auth, String imei) {
         
         if (authRegistered(auth)) {
@@ -250,6 +271,9 @@ public class JT808_Handler {
         return "00";
     }
 
+    /*
+     * Check If Authentication Code Exists
+     */
     public boolean authRegistered(String auth) {
         BufferedReader reader;
         boolean result = false;
@@ -285,6 +309,9 @@ public class JT808_Handler {
         return result;
     }
 
+    /*
+     * Get Manufacturer ID
+     */
     public String getManID(String str) {
         return str.substring(8, 18);
     }

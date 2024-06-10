@@ -7,6 +7,7 @@ import java.io.IOException;
 public class ProtocolHandler {
     // Reference to the associated client handler
     ClientHandler client;
+
     // Instances of protocol handlers for GT06 and JT808 protocols
     private GT06_Handler gh;
     private JT808_Handler jh;
@@ -108,6 +109,7 @@ public class ProtocolHandler {
         client.setName(name);
     }
 
+    // Check For Duplicates
     public void checkDups() {
         client.checkDups();
     }

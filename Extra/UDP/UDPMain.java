@@ -8,8 +8,8 @@ import java.net.UnknownHostException;
 public class UDPMain {
     
     public static void main(String[] args) throws SocketException, UnknownHostException {
-        udp es = new udp();
-        es.start();
+        udp u = new udp();
+        u.start();
     }
 }
 

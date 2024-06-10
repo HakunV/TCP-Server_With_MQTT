@@ -11,11 +11,15 @@ public class Connack {
 
         boolean accepted = false;
 
+        // Fixed Header
+
         int[] remLenRes = MQTT.recRemLen(str.substring(pointer));
         System.out.println("Length: " + remLenRes[0]);
         System.out.println();
 
         pointer = pointer + remLenRes[1]*byteSize;
+
+        // Variable Header
 
         boolean session = Integer.parseInt(str.substring(pointer, pointer+1*byteSize), 16) == 1 ? true : false;
         System.out.println("    Session Present: " + session);
